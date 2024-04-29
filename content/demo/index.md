@@ -193,13 +193,6 @@ Same as images, but with a few differences: `no_hover` and `url_min` are not ava
 
 Alright, this one doesn't simplify anything, it just adds a CRT-like effect around Markdown code blocks.
 
-```jinja2
-{%/* crt() */%}
--> Markdown code block <-
-{%/* end */%}
-```
-
-{% crt() %}
 
 ```
  _____________________________________________
@@ -223,8 +216,6 @@ Alright, this one doesn't simplify anything, it just adds a CRT-like effect arou
 |.','          /%%%%%%%%%%%%%%%\          ','.|
 |;____________/%%%%%Spicer%%%%%%\____________;|
 ```
-
-{% end %}
 
 ## Captions
 
