@@ -2,7 +2,11 @@
 <head>
     
     <style>
-		body {background-color: #4c5270;}
+		body {
+		font-family: "Times New Roman";
+		background-color: white;
+		margin: 0;
+		}
 			
 		@font-face {
 			font-family: "FrontPageNeue";
@@ -16,16 +20,151 @@
 
         ueberschrift{
             font-size: 90px;
-            font-family: 'FrontPageNeue', sans-serif;
-            color: #f6eee0;
+            font-family: "Times New Roman", serif;
+			font-weight: bold;
+            color: #2d2d2d;
+            text-align: center;
+			position: relative;
+        }
+		
+		ueberschrift::before {
+			content: "";
+			position: absolute;
+			left: 7%;
+			bottom: 13px;
+			width: 100%;
+			height: 14px;
+			transform: skew(-12deg) translateX(-8%);
+			background: #1b7373;
+			z-index: -1;
+		}
+		
+		ueberschrift::selection {
+            background-color: #ffb766;
+            color: white;  
+        }
+		
+		
+		p{
+			color: #ffb766;
+		
+		}
+		
+		::selection {
+            background-color: #ffb766;
+            color: white;  
+        }
+		
+		
+		a {
+            color: #ffb766;
+        }
+		
+		a:hover {
+			color: yellow;
+		}
+		
+		a:link { 
+		  text-decoration: none; 
+		} 
+		a:visited { 
+		  text-decoration: none; 
+		} 
+		a:hover { 
+		  text-decoration: none; 
+		} 
+		a:active { 
+		  text-decoration: none; 
+		}
+		
+		header {
+            display: grid;
+            grid-template-columns: 70px calc(100% - 140px) 70px;
+            height: 70px;
+            background-color: #2d2d2d;
+            align-items: center;
+        }
+        .left, .center, .right {
             text-align: center;
         }
+		
+		.left {
+			height: 70px;
+            background-color: #1b7373;
+        }
+		.right {
+			height: 70px;
+            background-color: #1b7373;
+        }
+		
+		.left, .right {
+			aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column; /* Stellt die Striche untereinander */
+            align-items: center; /* Zentriert die Striche horizontal */
+            justify-content: center; /* Zentriert die Striche vertikal */
+            gap: 5px; /* Abstand zwischen den Strichen */
+        }
+        .menu-line {
+            width: 40px; /* Breite der Striche */
+            height: 5px; /* Höhe der Striche */
+            background-color: white; /* Farbe der Striche */
+        }
+		
+		textnormal {
+            font-family: 'Playfair Display', serif;
+			text-align: justify;
+            color: #1b7373;
+            font-size: 19px;
+            padding-left: 20%;
+            padding-right: 20%;
+            display: block; 
+			margin-bottom: 20px;          
+            line-height: 1.6;            
+        }
+		
+		 textnormal::selection {
+            background-color: #f2777a;
+            color: white;  
+        }
+        
+		
     </style>
 
     
 </head>
 <body>
-    <ueberschrift>Webseite von Oskar</ueberschrift>
-    <p>Paragraph 1</p>
+	
+	 <header>
+        <div class="left">
+            <!-- Menü-Striche -->
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+        </div>
+        <div class="center"><p><a href="https://github.com/Oskaraks0">&copyOskaraks0.github</a></p></div>
+        <div class="right">
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+            <div class="menu-line"></div>
+        </div>
+    </header>
+	
+	<center>
+	
+	<br>
+    <ueberschrift>Webseite von Oskar</ueberschrift><br><br><br></center>
+	<textnormal>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+
+Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+
+Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+	</textnormal>
 </body>
 </html>
