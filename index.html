@@ -23,8 +23,9 @@
             font-family: "Times New Roman", serif;
 			font-weight: bold;
             color: #2d2d2d;
-            text-align: center;
+            text-align: left;
 			position: relative;
+			left: 20%;
         }
 		
 		ueberschrift::before {
@@ -40,7 +41,7 @@
 		}
 		
 		ueberschrift::selection {
-            background-color: #ffb766;
+            background-color: #1b7373;
             color: white;  
         }
 		
@@ -83,7 +84,29 @@
             height: 70px;
             background-color: #2d2d2d;
             align-items: center;
+			z-index: 1000;   /* Über anderem Inhalt anzeigen */
+			position: fixed; /* Fixiert am oberen Rand */
+            top: 0;
+            left: 0;
+            width: 100%; 
+			z-index: 1000;
+            transition: transform 0.3s ease; /* Glatter Übergang */
         }
+
+        header.hidden {
+            transform: translateY(-100%); /* Header aus dem sichtbaren Bereich schieben */
+        }
+
+        /* Innere Struktur */
+        .covered-div {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            //padding: 10px 20px;
+        }
+		
+		
+		
         .left, .center, .right {
             text-align: center;
         }
@@ -127,6 +150,43 @@
             background-color: #f2777a;
             color: white;  
         }
+        
+		
+		
+		zueberschrift{
+            font-size: 30px;
+            font-family: "Times New Roman", serif;
+			font-weight: bold;
+            color: #2d2d2d;
+            text-align: center;
+			position: relative;
+			left: 20%;
+        }
+		
+		zueberschrift::before {
+			content: "";
+			position: absolute;
+			left: 7%;
+			bottom: -1px;
+			width: 102%;
+			height: 7px;
+			transform: skew(-12deg) translateX(-8%);
+			background: #ffb766;
+			z-index: -1;
+		}
+		
+		zueberschrift::selection {
+            background-color: #ffb766;
+            color: white;  
+        }
+		
+		aktual{
+			font-size: 20px;
+			padding-left: 20%;
+            padding-right: 20%;
+			color: #adadad;
+		
+		}
 		
 		div.covered-div {
 			position: relative;
@@ -139,24 +199,105 @@
 		   left: 0;
 		   right: 0;
 		}
-        
+		
+		.burger-menu {
+        position: fixed;
+        top: 70px;
+        left: -300px;
+        width: 300px;
+        height: 100%;
+        background-color: #f9f9f9;
+        transition: 0.3s;
+        z-index: 1001;
+        overflow-y: auto;
+		
+    }
+
+    .burger-menu.open {
+        left: 0;
+		
+    }
+	
+	.burger-menu::-webkit-scrollbar {
+    display: none;
+	}
+
+    .burger-menu ul {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    .burger-menu li {
+        padding: 15px 20px;
+    }
+
+    .burger-menu a {
+        color: #1b7373;
+        text-decoration: none;
+        font-size: 18px;
+    }
+	
+	.burger-menu .divider {
+		height: 2px;
+		background-color: #1b7373;
+		margin: 20px;
+		margin-top: 3px;
+		width: 80%
+	}
+
+    .burger-menu a:hover {
+        color: #ffb766;
+    }
+		
 		
     </style>
 
     
 </head>
 <body>
+	<div class="burger-menu" id="burger-menu">
+    <ul>
+      <li><span style="font-weight: bold; font-size: 30px"><a href="#" id="close-menu">Schließen</a></span></li>
+	  <div class="divider"></div>
+      <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+	  <li><a href="#">Startseite</a></li>
+      <li><a href="#">Über uns</a></li>
+      <li><a href="#">Kontakt</a></li>
+    </ul>
+  </div>
 	
-	 <header>
+	 <header id="main-header">
 		 <div class="covered-div">
-			<a class="cover-link" href="version2.html"></a>
-	  
-			<div class="left">
-			
-					<!-- Menü-Striche -->
-					<div class="menu-line"></div>
-					<div class="menu-line"></div>
-					<div class="menu-line"></div>
+			 <div class="left" id="burger-button">
+		  
+				<div class="left">
+				
+						<!-- Menü-Striche -->
+						<div class="menu-line"></div>
+						<div class="menu-line"></div>
+						<div class="menu-line"></div>
+				</div>
 			</div>
 		</div>
 		<div class="center"><p><a href="https://github.com/Oskaraks0">&copyOskaraks0.github</a></p></div>
@@ -164,17 +305,60 @@
 		<div class="covered-div">
 			<a class="cover-link" href="www.google.com"></a>
 			<div class="right">
-				<div class="menu-line"></div>
-				<div class="menu-line"></div>
-				<div class="menu-line"></div>
+				<span style="font-size:300%"><span style="color:white">&#x1F6C8</span></span><span style="font-size:1px"><br></span>
 			</div>
 		</div>
     </header>
 	
-	<center>
+	<script>
+        // JavaScript für Scroll-Verhalten
+        const header = document.getElementById('main-header');
+        let lastScrollY = window.scrollY;
+
+        /*window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY) {
+                // Beim Runterscrollen: Header verstecken
+                header.classList.add('hidden');
+            } else {
+                // Beim Hochscrollen: Header anzeigen
+                header.classList.remove('hidden');
+            }
+            lastScrollY = window.scrollY;
+        });*/
+		function isMenuOpen() {
+    return burgerMenu.classList.contains('open');
+}
+
+window.addEventListener('scroll', () => {
+    if (isMenuOpen()) return; // Nichts tun, wenn das Menü geöffnet ist
+
+    if (window.scrollY > lastScrollY) {
+        // Beim Runterscrollen: Header verstecken
+        header.classList.add('hidden');
+    } else {
+        // Beim Hochscrollen: Header anzeigen
+        header.classList.remove('hidden');
+    }
+    lastScrollY = window.scrollY;
+});
+		
+		const burgerButton = document.getElementById('burger-button');
+    const burgerMenu = document.getElementById('burger-menu');
+    const closeMenu = document.getElementById('close-menu');
+
+    function toggleMenu() {
+      burgerMenu.classList.toggle('open');
+      document.body.classList.toggle('menu-open');
+    }
+
+    burgerButton.addEventListener('click', toggleMenu);
+    closeMenu.addEventListener('click', toggleMenu);
+    </script>
 	
-	<br>
-    <ueberschrift>Webseite von Oskar</ueberschrift><br><br><br></center>
+	
+	
+	<br><br><br><br><br><br>
+    <ueberschrift>Webseite von Oskar</ueberschrift><br><aktual>&#9716 19 / 12 / 2024, 12:09</aktual><br><br>
 	<textnormal>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
 
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
@@ -185,6 +369,17 @@ Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming 
 
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
 
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+	</textnormal>
+	<zueberschrift>Zwischen&uumlberschrift</zueberschrift><br><br>
+	<textnormal>Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
 At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
 	</textnormal>
 </body>
