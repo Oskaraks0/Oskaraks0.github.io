@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Werkbetrachtung - Zwischen Himmel und Erde</title>
+	<link rel="icon" type="image/x-icon" href="bildEcht.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lato:wght@300;400&family=Playfair+Display:wght@400;700&family=Cutive+Mono&display=swap');
+        
+        :root {
+            --color-sky-light: #c0d2e1;
+            --color-sky-dark: #6e859e;
+            --color-earth-light: #b3c99e;
+            --color-earth-dark: #484738;
+            --color-wire: #4a4a4a;
+            --color-text: #333;
+            --color-red-thread: #b91c1c;
+        }
+
+		p a {
+			color: #7a7465;
+		}
+		
+		p a:hover {
+			color: #C7693E;
+		}
+		
+		li a {
+			color: red;
+		}
+		
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            background-color: #f7fafc;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Deckblatt */
+        .deckblatt-himmel {
+            height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            background-color: var(--color-sky-light);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M100 0c0 50-50 50-50 100s-50-50-100-50' stroke='%23ffffff' stroke-width='2' fill='none' opacity='0.5'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+        }
+
+        .deckblatt-erde {
+            height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            background-color: var(--color-earth-light);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 100h100V0H0v100zM10 10v80h80V10H10z' fill='%23989472' opacity='0.3'/%3E%3C/svg%3E");
+            background-size: 50px 50px;
+        }
+
+        .schrift-himmel {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--color-sky-dark);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+        }
+
+        .schrift-erde {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: var(--color-earth-dark);
+            font-weight: 700;
+        }
+
+        .wire-connection {
+            position: absolute;
+            top: 50vh;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--color-wire), var(--color-wire) 15px, transparent 15px, transparent 30px);
+            z-index: 10;
+        }
+
+        /* Werkdaten & Beschreibung */
+        .werkdaten-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 2rem;
+            padding: 4rem;
+        }
+        
+        .grid-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0V0zM10 10v80h80V10H10z' fill='none' stroke='%23e2e8f0' stroke-width='1'/%3E%3C/svg%3E");
+            background-size: 20px 20px;
+        }
+
+        .technical-font {
+            font-family: 'Cutive Mono', monospace;
+        }
+
+        .detail-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-red-thread);
+            border-radius: 50%;
+            z-index: 20;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .detail-point:hover {
+            transform: scale(1.5);
+        }
+        .detail-point::after {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: none;
+            font-size: 0.8rem;
+        }
+        .detail-point:hover::after {
+            display: block;
+        }
+
+        /* Interpretation */
+        .interpretation-section {
+            padding: 4rem;
+            position: relative;
+            background-color: #f7f3e9; /* Light paper-like color */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23f1e9d8' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+        }
+        
+        /* Neue Stile für die Interpretation */
+        .interpretation-content {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .interactive-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0; /* No gap */
+            padding: 0; /* No padding */
+            background-color: var(--color-wire); /* Dark gray background */
+            border-radius: 0; /* No rounded corners */
+            margin-top: 2rem;
+            max-width: 10000px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden; /* Fixes potential overflow from no border-radius */
+        }
+
+        .grid-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            background-color: #4b5563; /* Dark gray */
+            color: white; /* White text */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 0; /* No rounded corners */
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            min-width: 100px;
+        }
+        
+        .grid-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .grid-item.positive-sky {
+            background-color: var(--color-sky-light); /* hellblau */
+            color: var(--color-sky-dark);
+        }
+        
+        .grid-item.positive-earth {
+            background-color: var(--color-earth-light); /* hellgrün */
+            color: var(--color-earth-dark);
+        }
+
+        /* Stellungnahme */
+        .stellungnahme-section {
+			padding-top: 4rem;
+			padding-bottom: 4rem;
+background-color: #f7f3e9; /* Light paper-like color */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23f1e9d8' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        /* Keyframes für die Leuchten-Animation */
+        @keyframes glowing-heading {
+            0% {
+                text-shadow: 0 0 5px #c0d2e1, 0 0 10px #c0d2e1, 0 0 15px #c0d2e1;
+            }
+            50% {
+                text-shadow: 0 0 10px #7b99b5, 0 0 20px #7b99b5, 0 0 30px #7b99b5;
+            }
+            100% {
+                text-shadow: 0 0 5px #c0d2e1, 0 0 10px #c0d2e1, 0 0 15px #c0d2e1;
+            }
+        }
+        .glowing-heading {
+            animation: glowing-heading 3s infinite alternate;
+            font-weight: 700;
+        }
+
+        .stellungnahme-section h2 {
+            color: #333333; /* Dunkelblaue Textfarbe */
+			font-size: 100px;
+        }
+
+        .stellungnahme-grid {
+            display: grid;
+            grid-template-columns: 1fr 250px 1fr;
+            gap: 2rem;
+            padding: 4rem;
+        }
+        .stellungnahme-art {
+            text-align: center;
+        }
+        .symbol {
+            display: inline-block;
+            width: 1.2em;
+            height: 1.2em;
+            line-height: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+		
+		/* Zusätzliche Stile für den Bildeffekt */
+        .image-container {
+            position: relative;
+            height: 80%;
+            min-height: 240px; /* 80% of min-height 300px from parent container*/
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .image-container:hover .image-overlay {
+            opacity: 1;
+        }
+        
+        .image-container:hover img {
+            filter: blur(5px);
+        }
+
+        /* Stile für den interaktiven Teil (2.1) */
+        .interactive-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap; 
+        }
+
+        .interactive-box {
+            position: relative;
+            width: calc(100% / 7 - 1.5rem);
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #d1d5db; /* Light gray */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            min-width: 100px;
+        }
+
+        .interactive-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .interactive-box-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .interactive-box:hover .interactive-box-overlay {
+            opacity: 1;
+        }
+
+        .interactive-box-text {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .interactive-box-text:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease-in-out;
+            transform: translateX(-50%);
+        }
+        
+        .interactive-box:hover .interactive-box-text:after {
+            width: 100%;
+        }
+
+        /* Modal-Stile */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+        
+        /* Icon-Stile */
+        .icon-container {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Einheitliche Icon-Stile */
+        .unified-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 80%;
+            height: 80%;
+        }
+        .unified-icon-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+        }
+        .icon-text-overlay {
+            position: relative;
+            z-index: 10;
+        }
+        .icon-line {
+            position: absolute;
+            background-color: #4a4a4a;
+        }
+        .icon-circle {
+            background-color: #4a4a4a;
+            border-radius: 50%;
+        }
+
+        /* Neue Stile für Stellungnahme */
+        .paper-overlay {
+            position: relative;
+            width: 20%; /* 40% / 2 = 20% */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            transform: rotate(90deg); /* 90 Grad gedreht */
+        }
+        
+        .paper-overlay:hover {
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        .paper-overlay img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .paper-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1) rotate(-90deg); /* Text zurückdrehen */
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            transition: transform 0.3s ease-in-out, text-decoration 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        
+        .paper-text:hover {
+            transform: translate(-50%, -50%) scale(1.2) rotate(-90deg);
+            text-decoration: underline;
+        }
+		
+		.switch input:checked + .slider {
+            background-color: var(--color-earth-light); /* Schaltet auf hellgrün, wenn aktiviert */
+        }
+        
+        .switch input:focus + .slider {
+            box-shadow: 0 0 1px var(--color-earth-light);
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(1.25rem); /* Stellt sicher, dass der Knopf nach rechts rutscht */
+        }
+        
+        /* Stile für die neuen Inhaltsblöcke */
+        .content-block {
+            background-color: white;
+            padding: 4rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        .content-block.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .content-block h2 {
+            font-family: 'Lato', sans-serif;
+			color: var(--color-text);
+
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5rem;
+		line-height: 2.5rem;
+        }
+        
+        .content-block h3 {
+            font-family: 'Lato', sans-serif;
+    color: var(--color-text);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    padding-bottom: 0.5rem;
+    line-height: 1;
+        }
+        
+        .content-block p {
+            font-family: 'Lato', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-align: justify; /* Blocksatz */
+        }
+		
+		.mb-4 {
+			text-align: justify;
+		}
+		
+		.mt-4 {
+			text-align: justify;
+		}
+        
+        .image-caption {
+            display: block;
+            text-align: center;
+            font-style: italic;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        
+        .content-block figure {
+            margin: 2rem 0;
+            text-align: center;
+        }
+		
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container rounded-md">
+        <!-- 1. Deckblatt & Einleitung -->
+        <section class="relative">
+            <div class="deckblatt-himmel">
+                <h1 class="schrift-himmel">Zwischen Himmel und Erde</h1>
+            </div>
+            <div class="wire-connection"></div>
+            <div class="deckblatt-erde">
+                <h2 class="schrift-erde">Eine Werkbetrachtung zur OSTRALE 2025</h2>
+                <p class="text-md text-gray-700 mt-2">Abgabetermin: 25.09.2025</p>
+                <p class="text-md text-gray-700">Abgabe von: Oskar Schwarzbach (11ku3)</p>
+            </div>
+        </section>
+
+        <!-- 1. Angaben zum Werk -->
+        <section class="werkdaten-grid grid-bg">
+            <div class="h-full flex flex-col justify-center">
+                <h2 class="text-4xl font-bold mb-8">1. Angaben zum Werk</h2>
+                <ul class="technical-font space-y-2">
+                    <li>Künstler: Christian Roosen (*1954)</li>
+                    <li>Titel: Zwischen Himmel und Erde</li>
+                    <li>Entstehungsjahr: 2021</li>
+                    <li>Technik/Material: Foto-Abzug hinter Acrylglas auf Dibond</li>
+                    <li>Maße: 135 x 90 cm</li>
+                    <li>Standort: (Raum Natur) OSTRALE-Biennale, Dresden</li>
+                    <li>Herkunft des Künstlers: Belgien (der Moderne)</li>
+                </ul>
+            </div>
+            <div class="flex flex-col items-center justify-center h-full">
+                <div class="flex flex-row items-center justify-center gap-4 w-full">
+                    <div class="image-container">
+                        <img src="künstler.png" alt="Eine Darstellung des Künstlers Christian Roosen.">
+                        <div class="image-overlay">
+                            <span class="text-xl font-bold">Christian Roosen</span>
+                        </div>
+                    </div>
+                    <div class="image-container">
+                        <img src="bildEcht.png" alt="Eine Darstellung des Kunstwerkes Zwischen Himmel und Erde.">
+                        <div class="image-overlay">
+                            <span class="text-xl font-bold">Zwischen Himmel und Erde</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Beschreibung (Analyse des Sichtbaren) -->
+        <section class="p-12">
+            <h2 class="text-4xl font-bold mb-8 text-center">2. Beschreibung (Analyse des Sichtbaren)</h2>
+						<p class="mb-4">
+Das Foto zeigt eine Nahaufnahme, die von einem zentralen Element beherrscht wird: einem horizontal verlaufenden Stacheldraht. Dieser Draht befindet sich im scharfen Fokus des Vordergrunds und teilt das Bild in zwei Hälften.
+</p><p class="mb-4">
+Die obere, etwas kleinere Hälfte wird von einem hellen, teilweise wolkenlosen Himmel eingenommen, der sich nach oben hin in einem zarten Blau verliert. Die untere Hälfte zeigt eine große grüne Fläche, die anscheinend ein Feld oder eine Wiese ist. Diese Fläche ist im Gegensatz zum Draht unscharf und verschwommen, was eine geringe Tiefenschärfe erkennen lässt.
+</p><p class="mb-4">
+Auf dem Stacheldraht sind in regelmäßigen Abständen scharfe, gedrehte Widerhaken zu sehen. Die hellen Lichtverhältnisse lassen vermuten, dass die Aufnahme bei Tageslicht gemacht wurde. Es sind keine weiteren Objekte oder Figuren im Bild zu erkennen.</p><br>
+            <div class="space-y-8">
+                <details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Format</summary>
+                    <div class="flex flex-col items-center justify-center my-4 p-[2rem] bg-gray-50 rounded-lg shadow-inner">
+                        <div class="relative w-48 h-32 border-b-2 border-b-green-500 border-r-2 border-r-blue-500 rounded-md bg-gray-100">
+                            <!-- Höhe-Label -->
+                            <span class="absolute right-[-4rem] top-1/2 -translate-y-1/2 text-sm text-blue-500">90 cm</span>
+                            <!-- Breite-Label -->
+                            <span class="absolute bottom-[-2rem] left-1/2 -translate-x-1/2 text-sm text-green-500">135 cm</span>
+                        </div>
+                    </div>
+                    <p class="mt-4">
+                        Das Werk ist im Querformat mit den Maßen 135 (B) x 90 (H) cm erstellt wurden. Das Format betont die horizontale Teilung des Bildes. Die Gesamtfläche des Werkes beträgt 1,215 m&sup2.
+                    </p>
+                </details>
+                
+                <details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Farbigkeit</summary>
+                    <div class="flex flex-col items-center justify-center my-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <div class="relative w-48 h-32 flex flex-col rounded-md overflow-hidden">
+                            <div class="h-1/2 bg-[var(--color-sky-light)] flex items-center justify-center">
+                                <span class="text-xs text-[var(--color-sky-dark)] font-bold">Hellblau</span>
+                            </div>
+                            <div class="h-1/2 bg-[var(--color-earth-light)] flex items-center justify-center">
+                                <span class="text-xs text-[var(--color-earth-dark)] font-bold"><br>Grün</span>
+                            </div>
+                            <!-- Graue Linie, die den Draht repräsentiert -->
+                            <div class="absolute inset-y-1/2 h-0.5 w-full bg-gray-700"></div>
+                        </div>
+                    </div>
+                    <p class="mt-4">
+                        Das Bild hat eine ruhige, pastellartige Farbgebung. Das helle Blau des Himmels und das kräftige Grün des Feldes schaffen eine harmonische, natürliche Atmosphäre.
+Dieser Eindruck wird jedoch durch den Stacheldraht unterbrochen. Seine dunkle, scharfe Linie steht im starken Kontrast zu den sanften, weichen Farben. 
+                    </p>
+                </details>
+                
+                <details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Formen/Linienführung</summary>
+                    <p class="mt-4">
+                        Im Bild dominiert die horizontale Linie des Stacheldrahts, die sich fast gerade und betont von links nach rechts über das Bild zieht. Diese Linie wirkt eher geometrisch und streng. Der Draht selbst zeigt durch die Drehungen und die Dornen kleinere, wiederholte Formen, die ebenfalls eine klare Struktur haben. Der Hintergrund dagegen ist weich und ohne erkennbare Linien oder Formen, eher organisch und unbetont. Insgesamt entsteht so ein Gegensatz zwischen der betonten, geometrischen Linie im Vordergrund und der ruhigen, formlosen Fläche im Hintergrund.
+                    </p>
+                </details>
+                
+                <details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Komposition</summary>
+                    <div class="flex flex-col items-center justify-center my-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <div class="relative w-48 h-32 flex flex-col rounded-md overflow-hidden">
+                            <div class="h-1/2 bg-[var(--color-sky-light)] flex items-center justify-center">
+                                <span class="text-xs text-[var(--color-sky-dark)] font-bold">Hintergrund</span>
+                            </div>
+                            <div class="h-1/2 bg-[var(--color-earth-light)] flex items-center justify-center">
+                                <span class="text-xs text-[var(--color-earth-dark)] font-bold"><br>Hintergrund</span>
+                            </div>
+                            <!-- Graue Linie, die den Draht repräsentiert -->
+                            <div class="absolute inset-y-1/2 h-0.5 w-full bg-gray-700"></div>
+							<div class="absolute top-1/2 w-full text-center text-xs text-bg-gray-700 font-bold z-20 pt-1">Vordergrund</div>
+                        </div>
+                    </div>
+                    <p class="mt-4">
+                        Im Vordergrund befindet sich der Stacheldraht, der als scharfe, horizontale Linie fast die gesamte Bildbreite einnimmt und so den Blick sofort auf sich zieht. Ein klarer Mittelgrund ist nicht vorhanden, da zwischen Draht und Landschaft keine weiteren Bildelemente liegen. Der Hintergrund zeigt eine verschwommene Fläche in Gelbgrün sowie darüber den hellen Himmel in Blau- und Weißtönen. Durch die starke Schärfentiefe entsteht ein deutlicher Kontrast zwischen dem klar gezeichneten Vordergrund und dem unscharfen Hintergrund. Der Bildaufbau ist somit sehr reduziert und wirkt durch die horizontale Gliederung streng und geordnet.
+                    </p>
+                </details>
+                
+                <details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Materialität</summary>
+                    <div class="flex flex-col items-center justify-center my-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <div class="relative w-48 h-32 bg-gray-200 rounded-lg shadow-xl flex items-center justify-center text-sm text-gray-500">
+                            <span class="absolute inset-2 border border-dashed border-gray-400 rounded-md flex items-center justify-center">Foto-Abzug</span>
+                            <span class="absolute top-1 right-2 text-xl">✨</span>
+                        </div>
+                    </div>
+                    <p class="mt-4">
+                        Das Werk ist ein Foto-Abzug hinter 4 mm starkem Acrylglas. Die Rückwand besteht aus einem 3 mm starken Alu-Dibond, das wiederum aus zwei beschichteten Aluminiumplatten mit einem Polyethylenkern besteht. Als Aufhängung dienen Aluminium-Schienen. Die glatte, spiegelnde Oberfläche des Acrylglases steht im Kontrast zur harten, dornigen Natur des Drahtes. Die Unschärfe des Hintergrundes betont die Schärfe des Hauptmotivs.
+                    </p>
+                </details>
+				
+				<details class="collapsible-text p-6 bg-white rounded-lg shadow-md">
+                    <summary class="text-2xl font-bold mb-2 cursor-pointer">Technik und Gestaltungsmittel</summary>
+                    <div class="flex flex-col items-center justify-center my-4 p-4 bg-gray-50 rounded-lg shadow-inner">
+                        <div class="relative w-48 h-32 flex rounded-lg shadow-xl overflow-hidden">
+                            <!-- Kamera Icon -->
+                            <div class="w-full h-full bg-gray-600 flex items-center justify-center text-center text-4xl relative">
+                                <span class="text-gray-100">📸</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-4">
+                        In technischer Hinsicht handelt es sich bei dem Werk um eine Fotografie. Die Trennung von scharfem Vordergrund und unscharfem Hintergrund deutet darauf hin, dass mit einer großen Blendenöffnung (=kleine Blendenzahl) gearbeitet wurde.
+                    </p>
+                </details>
+            </div>
+        </section>
+
+        <!-- 3. Interpretation -->
+        <section class="interpretation-section">
+            <h2 class="text-4xl font-bold mb-8 text-center">3. Interpretation (Deutung des Werkes)</h2>
+            <div class="interpretation-content">
+                <p class="mb-4">
+                    Das Foto inszeniert eine starke Spannung zwischen der Freiheit und Begrenzung. Das zentrale Motiv, der Stacheldraht im Vordergrund, symbolisiert Ausgrenzung und Hindernisse und steht in einem direkten Gegensatz zur weiten, friedlichen Landschaft im Hintergrund, die für Hoffnung und Freiheit steht. Jedoch ist die Landschaft nur sehr verschwommen erkennbar und wirkt dadurch ein Stück weniger erreichbar.
+                </p>
+                <p class="mb-4">
+                    Diese visuelle Trennung ruft beim Betrachter widersprüchliche Gefühle hervor. Einerseits weckt die sanfte Landschaft Ruhe und Frieden, andererseits erzeugt der scharfe Draht ein Gefühl von Unbehagen und Eingeschränktheit. Diese Mischung aus positiven und negativen Assoziationen fordert den Betrachter zur Auseinandersetzung mit dem Konflikt zwischen idyllischer Vorstellung und der rauen Realität auf.
+                </p>
+                <p class="mb-4">
+                    Der Stacheldraht kann als universelles Symbol für Grenzziehungen, Migration oder gesellschaftliche Abschottung gelesen werden. Das Werk wirkt somit sehr zeitnah und kann kritisch auf aktuelle Entwicklungen verweisen. In seiner Auseinandersetzung mit Grenzen lässt sich das Werk auch in Beziehung zu anderen Fächern (als Kunst) setzen. So kann die Analyse von politischen und geografischen Grenzen in Erdkunde, Geschichte oder GRW vertieft werden, während die psychologischen Aspekte von Ausgrenzung und Freiheit in Fächern wie Psychologie oder Ethik behandelt werden können
+                </p>
+                <p class="mb-4">
+                    Da über Christian Roosen kaum öffentliche biografische Details bekannt sind, kann man nur spekulieren, inwieweit persönliche Erfahrungen seine Kunst beeinflussen. Dennoch geben andere seiner Werke Aufschluss über wiederkehrende Themen in seinem Schaffen. So nutzt er beispielsweise die Fotoserie <a href="https://www.cr-licht.de/figar%C3%B6s"><i>Figarös</i></a>, um auf die Herausforderungen im Umgang mit ADHS aufmerksam zu machen, indem er die emotionale Intensität dieser Momente authentisch festhält. Auch im vorliegenden Werk, <i>Zwischen Himmel und Erde</i>, lassen sich ähnliche Motive finden. Zwar ist es nicht auf ein spezifisches medizinisches Thema bezogen, aber es zeigt ebenfalls ein grundlegendes Problem: die menschliche Erfahrung von Einschränkung.
+                </p>
+                
+                 <div class="interactive-grid">
+                    <div class="grid-item" data-concept="begrenzung" data-negative="Begrenzung" data-positive="Weite" data-status="negative">Begrenzung</div>
+                    <div class="grid-item" data-concept="gefangenschaft" data-negative="Gefangenschaft" data-positive="Freiheit" data-status="negative">Gefangenschaft</div>
+                    <div class="grid-item" data-concept="isolation" data-negative="Isolation" data-positive="Miteinander" data-status="negative">Isolation</div>
+                    <div class="grid-item" data-concept="ausgrenzung" data-negative="Ausgrenzung" data-positive="Zugehörigkeit" data-status="negative">Ausgrenzung</div>
+                    <div class="grid-item" data-concept="bedrohung" data-negative="Bedrohung" data-positive="Sicherheit" data-status="negative">Bedrohung</div>
+                    <div class="grid-item" data-concept="abwehr" data-negative="Abwehr" data-positive="Offenheit" data-status="negative">Abwehr</div>
+                    <div class="grid-item" data-concept="enge" data-negative="Enge" data-positive="Unendlichkeit" data-status="negative">Enge</div>
+                    <div class="grid-item" data-concept="ausschluss" data-negative="Ausschluss" data-positive="Einbeziehung" data-status="negative">Ausschluss</div>
+                    <div class="grid-item" data-concept="spannung" data-negative="Spannung" data-positive="Harmonie" data-status="negative">Spannung</div>
+                    <div class="grid-item" data-concept="haerte" data-negative="Härte" data-positive="Weichheit" data-status="negative">Härte</div>
+                    <div class="grid-item" data-concept="realitaet" data-negative="Realität" data-positive="Ideal" data-status="negative">Realität</div>
+                    <div class="grid-item" data-concept="einschraenkung" data-negative="Einschränkung" data-positive="Zwanglosigkeit" data-status="negative">Einschränkung</div>
+                    <div class="grid-item" data-concept="unfreiheit" data-negative="Unfreiheit" data-positive="Entwicklung" data-status="negative">Unfreiheit</div>
+                    <div class="grid-item" data-concept="trennlinie" data-negative="Trennlinie" data-positive="Übergang" data-status="negative">Trennlinie</div>
+                    <div class="grid-item" data-concept="kaelte" data-negative="Kälte" data-positive="Wärme" data-status="negative">Kälte</div>
+                </div>
+				<p class="mt-4 text-center">
+                    Das Raster unterstreicht die Dualität des Werkes. Klicken Sie auf ein Feld, um seinen Gegensatz zu erkunden.
+					<br>Das folgende Toggle friert das Raster ein und lässt Sie den Begriff im Zusammenhang mit dem Werk betrachten.
+                </p>
+				<div class="flex items-center justify-center my-8">
+                    <span class="mr-3 font-semibold text-gray-700">Informationen aus</span>
+                    <label class="switch relative inline-block w-12 h-6">
+                        <input type="checkbox" id="infoToggle" class="hidden">
+                        <span class="slider absolute cursor-pointer inset-0 bg-gray-400 rounded-full transition-all duration-300 before:absolute before:content-[''] before:h-5 before:w-5 before:left-0.5 before:bottom-0.5 before:bg-white before:rounded-full before:transition-all before:duration-300"></span>
+                    </label>
+                    <span class="ml-3 font-semibold text-gray-700">Informationen an</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Stellungnahme -->
+        <section class="stellungnahme-section">
+            <div class="space-y-12">
+                <!-- Einziger Draht -->
+                <div class="relative flex justify-center items-center">
+                    <!-- Die beiden Draht-Bilder nebeneinander -->
+                    <div class="flex flex-row gap-0 w-full" style="
+    height: 220px;
+">
+                        <img src="draht3.png" alt="Drahtbild 1" class="w-1/2">
+                        <img src="draht4.png" alt="Drahtbild 2" class="w-1/2">
+                    </div>
+                    <!-- Die vier Papier-Bilder darüber, alle am gleichen Draht -->
+                    <div class="absolute inset-0 flex items-center justify-between px-16">
+                        <!-- Erstes Papier-Bild -->
+                        <div class="paper-overlay cursor-pointer" style="width: 20%;" data-content-id="stellungnahme">
+                            <img src="papier.svg" alt="Papier 1">
+                            <span class="paper-text text-black-600" data-concept="Stellungnahme">Stellungnahme</span>
+                        </div>
+                        <!-- Zweites Papier-Bild -->
+                        <div class="paper-overlay cursor-pointer" style="width: 20%;" data-content-id="kritik">
+                            <img src="papier.svg" alt="Papier 2">
+                            <span class="paper-text text-black-400" data-concept="Unverständnis">Kritik<br>und<br>Unverständnis</span>
+                        </div>
+                        <!-- Drittes Papier-Bild -->
+                        <div class="paper-overlay cursor-pointer" style="width: 20%;" data-content-id="neuinterpretation">
+                            <img src="papier.svg" alt="Papier 3">
+                            <span class="paper-text text-black-200" data-concept="Neuinterpretation">Neuinterpretation<br>bzw.<br>Nachbildung</span>
+                        </div>
+                        <!-- Viertes Papier-Bild -->
+                        <div class="paper-overlay cursor-pointer" style="width: 20%;" data-content-id="meinung">
+                            <img src="papier.svg" alt="Papier 4">
+                            <span class="paper-text text-black-400" data-concept="Meinung">Meinung<br>zum<br>Thema</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Container für dynamische Inhalte -->
+        <div id="dynamic-content" class="px-12 pb-12"></div>
+
+        <!-- 5. Quellen-Sektion -->
+        <section class="p-12">
+            <h2 class="text-4xl font-bold mb-8 text-center">5. Quellen</h2>
+            <div class="flex flex-col border border-gray-300 rounded-lg overflow-hidden">
+                <!-- Header-Zeile -->
+                <div class="grid grid-cols-2 bg-gray-200 font-bold p-4">
+                    <div>Text-/Infoquellen</div>
+                    <div>Bildquellen</div>
+                </div>
+                <!-- Zeile 1 -->
+                <div class="grid grid-cols-2 p-4 border-b border-gray-300">
+                    <div>
+                        <ul>
+                            <li>OSTRALE-Biennale, Dresden, <link><a href ="Ausstellungstext.pdf">Ausstellungstext</a></link></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="https://www.cr-licht.de/autoportraits#&gid=1151689447&pid=1">künstler.png</a> [<a href="künstler.png">Bild von Christian Roosen</a>]</li>
+							<li><a href="https://www.cr-licht.de/Form-und-Farbe#&gid=1226049066&pid=1">bildEcht.png</a> [<a href="bildEcht.png">Abbildung des Werkes von Christian Roosen</a>]</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Zeile 2 -->
+                <div class="grid grid-cols-2 p-4 bg-gray-50 border-b border-gray-300">
+                    <div>
+                        <ul>
+                            <li><li>Künstler-Recherche über Christian Roosen, <a href="https://www.cr-licht.de" font-color="red">www.cr-licht.de</a></li></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="draht3.png">draht3.png</a> sowie <a href="draht4.png">draht4.png</a> [<a href="https://www.stickpng.com/de/img/sport/feldhockey/stacheldraht-einfaches-gewinde">Bild des Drahtes (siehe Sektion Stellungnahme)</a>]</li>
+							<li><a href="papier.svg">papier.svg</a> [<a href="https://de.freepik.com/vektoren#from_element=mainmenu">Bild des karierten Papiers (siehe Sektion Stellungnahme)</a>]</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white text-center py-4 mt-8">
+            <p>erstellt von Oskar Schwarzbach</p>
+        </footer>
+
+    </div>
+
+    <!-- Modal für die Detailansicht -->
+    <div id="text-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close-button">&times;</button>
+            <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+            <p id="modal-text"></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridItems = document.querySelectorAll('.grid-item');
+            const infoToggle = document.getElementById('infoToggle');
+            const modalOverlay = document.getElementById('text-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalText = document.getElementById('modal-text');
+            const modalCloseButton = document.getElementById('modal-close');
+            const paperOverlays = document.querySelectorAll('.paper-overlay');
+            const dynamicContentContainer = document.getElementById('dynamic-content');
+            let activePaperId = null;
+
+            const concepts = {
+                'begrenzung': {
+                    title: 'Begrenzung',
+                    text: 'Der Stacheldraht ist ein unmissverständliches Symbol für Begrenzung. Er zeigt, dass es im Leben physische, emotionale oder gesellschaftliche Grenzen gibt, die den Handlungsspielraum einschränken. Die horizontale Linie betont diese Begrenzung, die den "Himmel" von der "Erde" trennt.'
+                },
+                'weite': {
+                    title: 'Weite',
+                    text: 'Die weite, offene Landschaft im Hintergrund symbolisiert unendliche Weite und Freiheit. Sie ist ein Gegenpol zur Härte und Enge des Drahtes. Sie steht für unbegrenzte Möglichkeiten und unbeschwerte Offenheit.'
+                },
+                'gefangenschaft': {
+                    title: 'Gefangenschaft',
+                    text: 'Die stacheligen und einschränkenden Elemente des Drahtes können als Metapher für Gefangenschaft gesehen werden, sowohl physisch als auch mental. Es hindert den Blick am Schweifen und den Geist am Entfalten.'
+                },
+                'freiheit': {
+                    title: 'Freiheit',
+                    text: 'Im direkten Kontrast zur Begrenzung durch den Draht steht die Freiheit, die durch die verschwommene, offene Landschaft repräsentiert wird. Es ist die Freiheit von Zwängen, die Freiheit, zu träumen und zu hoffen, die Freiheit, die der Draht zu verwehren scheint.'
+                },
+                'isolation': {
+                    title: 'Isolation',
+                    text: 'Der scharfe Stacheldraht im Vordergrund trennt den Betrachter symbolisch von der weiten, offenen Landschaft im Hintergrund. Dieses trennende Element erzeugt ein Gefühl der Isolation und des Alleinseins, als ob man von einer Welt getrennt ist, die unerreichbar scheint.'
+                },
+                'miteinander': {
+                    title: 'Miteinander',
+                    text: 'Das Gegenstück zur Isolation ist das Miteinander. Obwohl im Bild keine Figuren zu sehen sind, kann die offene Landschaft ein Gefühl der Gemeinschaft und des geteilten Raumes hervorrufen, das im Gegensatz zur trennenden Wirkung des Drahtes steht.'
+                },
+                'ausgrenzung': {
+                    title: 'Ausgrenzung',
+                    text: 'Die klaren Linien des Drahtes, die eine Grenze ziehen, symbolisieren Ausgrenzung. Der Betrachter fühlt sich ausgeschlossen von der schönen Welt hinter dem Draht. Dies kann auf gesellschaftliche Barrieren oder persönliche Erfahrungen der Ausgrenzung hinweisen.'
+                },
+                'zugehörigkeit': {
+                    title: 'Zugehörigkeit',
+                    text: 'Die Welt hinter dem Draht kann als eine Gemeinschaft, ein Gefühl der Zugehörigkeit, interpretiert werden. Sie ist weich, warm und einladend, im Gegensatz zur kalten, trennenden Natur des Stacheldrahts. Der Draht repräsentiert somit den Ausschluss aus dieser Gemeinschaft.'
+                },
+                'bedrohung': {
+                    title: 'Bedrohung',
+                    text: 'Die scharfen Stacheln des Drahtes strahlen eine unmittelbare Bedrohung aus. Sie stehen für Gefahren, Hindernisse und die raue Realität des Lebens, die uns verletzen können.'
+                },
+                'sicherheit': {
+                    title: 'Sicherheit',
+                    text: 'Im Kontrast zur Bedrohung durch den Draht steht das Gefühl der Sicherheit, das die sanften, unendlichen Weiten der Landschaft im Hintergrund vermitteln können. Sie repräsentieren einen Zufluchtsort oder einen Ort der Ruhe jenseits der Bedrohungen.'
+                },
+                'abwehr': {
+                    title: 'Abwehr',
+                    text: 'Der Stacheldraht kann als ein Symbol der Abwehr interpretiert werden, um sich vor einer unbekannten oder bedrohlichen Außenwelt zu schützen. Er stellt eine Barriere dar, die den Betrachter von der Landschaft trennt, um ihn zu schützen oder einzusperren.'
+                },
+                'offenheit': {
+                    title: 'Offenheit',
+                    text: 'Die weite, offene Landschaft im Hintergrund steht im Gegensatz zur Abwehr. Sie symbolisiert Offenheit für neue Erfahrungen, Möglichkeiten und die Bereitschaft, die eigenen Grenzen zu überschreiten.'
+                },
+                'enge': {
+                    title: 'Enge',
+                    text: 'Obwohl der Draht nur eine horizontale Linie darstellt, vermittelt er ein Gefühl der Enge und des Eingesperrtseins. Er beschränkt den Blick des Betrachters und zwingt ihn, sich auf das trennende Element zu konzentrieren, anstatt die unendliche Weite der Landschaft zu genießen.'
+                },
+                'unendlichkeit': {
+                    title: 'Unendlichkeit',
+                    text: 'Der weite Horizont und die scheinbar endlose Landschaft im Hintergrund symbolisieren die Unendlichkeit der Möglichkeiten und des Raumes. Sie stehen im Gegensatz zur Begrenzung, die der Draht darstellt, und bieten eine visionäre Perspektive jenseits der Barriere.'
+                },
+                'ausschluss': {
+                    title: 'Ausschluss',
+                    text: 'Der Draht schafft eine deutliche Barriere, die den Betrachter ausschließt. Es ist ein Symbol für das Gefühl, nicht dazuzugehören oder von einem Ort, einer Person oder einer Erfahrung getrennt zu sein.'
+                },
+                'einbeziehung': {
+                    title: 'Einbeziehung',
+                    text: 'Das Gegenstück zum Ausschluss ist die Einbeziehung. Obwohl im Bild keine Einbeziehung stattfindet, kann die offene Landschaft als ein Ort der Einladung und des Dazugehörens interpretiert werden, der hinter der Barriere des Drahtes liegt.'
+                },
+                'spannung': {
+                    title: 'Spannung',
+                    text: 'Die Spannung entsteht durch den starken Kontrast zwischen der harten, künstlichen Linie des Drahtes und der weichen, natürlichen Landschaft. Dies erzeugt eine innere Spannung, die den Betrachter zwingt, über die Beziehung zwischen Realität und Ideal nachzudenken.'
+                },
+                'harmonie': {
+                    title: 'Harmonie',
+                    text: 'Die sanften, pastellartigen Farben im Hintergrund und die weichen Übergänge erzeugen eine Atmosphäre der Harmonie und des Friedens. Diese visuelle Harmonie kontrastiert stark mit der Spannung, die durch den Draht hervorgerufen wird.'
+                },
+                'haerte': {
+                    title: 'Härte',
+                    text: 'Die stachelige und kalte Natur des Drahtes steht für Härte und Unnachgiebigkeit. Es symbolisiert Hindernisse und Widrigkeiten, die im Leben unüberwindbar erscheinen können. Diese visuelle Härte kontrastiert mit der sanften, diffusen Umgebung.'
+                },
+                'weichheit': {
+                    title: 'Weichheit',
+                    text: 'Die Weichheit der Landschaft, die durch die verschwommenen Formen und sanften Farben entsteht, steht im Gegensatz zur Härte des Drahtes. Sie steht für Sanftheit, Trost und die fließenden, unbegrenzten Aspekte des Lebens.'
+                },
+                'realitaet': {
+                    title: 'Realität',
+                    text: 'Der Draht repräsentiert die raue und oft schmerzhafte Realität. Er ist ein unvermeidliches und scharfes Element, das die idyllische Vorstellung der Landschaft stört. Das Werk fordert den Betrachter auf, die Konfrontation zwischen der Hoffnung und der harten Wirklichkeit zu akzeptieren.'
+                },
+                'ideal': {
+                    title: 'Ideal',
+                    text: 'Das Ideal wird durch die schöne, weitläufige Landschaft hinter dem Draht repräsentiert. Es ist die Vision von dem, was sein könnte, von einer Welt ohne Barrieren und ohne Schmerz.'
+                },
+                'einschraenkung': {
+                    title: 'Einschränkung',
+                    text: 'Der Draht steht als klares Symbol für Einschränkung, die durch äußere Umstände oder persönliche Ängste auferlegt wird. Es ist ein Hindernis, das uns davon abhält, unser volles Potenzial auszuschöpfen.'
+                },
+                'zwanglosigkeit': {
+                    title: 'Zwanglosigkeit',
+                    text: 'Das Gegenstück zur Einschränkung ist die Zwanglosigkeit der offenen Landschaft. Sie steht für einen Zustand der Freiheit, in dem man sich ohne äußere Barrieren bewegen und entfalten kann.'
+                },
+                'unfreiheit': {
+                    title: 'Unfreiheit',
+                    text: 'Der Draht, der den Raum teilt, steht für Unfreiheit. Er zeigt, dass wir oft an sichtbare oder unsichtbare Grenzen gebunden sind, die unsere Entscheidungen und unser Leben beeinflussen.'
+                },
+                'entwicklung': {
+                    title: 'Entwicklung',
+                    text: 'Die offene Landschaft und der weite Horizont können als Symbole für Entwicklung und Fortschritt gesehen werden. Es ist die Hoffnung auf einen Weg nach vorne, auf die Überwindung der Hindernisse und die Entfaltung des eigenen Potenzials.'
+                },
+                'trennlinie': {
+                    title: 'Trennlinie',
+                    text: 'Der Draht fungiert als eine klare Trennlinie zwischen zwei Welten: der harten, linearen Realität des Drahtes und der weichen, farbigen Unschärfe des Hintergrunds. Diese Linie ist nicht nur physisch, sondern auch symbolisch eine Barriere, die den Übergang von einer Stimmung zur anderen verhindert.'
+                },
+                'uebergang': {
+                    title: 'Übergang',
+                    text: 'Trotz der Trennlinie kann die verschwommene Landschaft einen Übergang zu einer neuen Perspektive, einer neuen Hoffnung oder einem neuen Bewusstsein darstellen. Es ist die Möglichkeit, die Barriere zu überwinden und in eine neue Realität einzutreten.'
+                },
+                'kaelte': {
+                    title: 'Kälte',
+                    text: 'Die kalten Grautöne des Drahtes strahlen ein Gefühl der Kälte aus. Dies kann auf eine emotionale Kälte oder auf die Distanz zu anderen Menschen hinweisen.'
+                },
+                'waerme': {
+                    title: 'Wärme',
+                    text: 'Die wärmeren Farbtöne der Erde und des Himmels, der einladend wirkt, stehen für Wärme und Trost. Sie sind ein Gegenpol zur Kälte des Drahtes und symbolisieren Liebe, Hoffnung und Geborgenheit.'
+                },
+                'hoffnung': {
+                    title: 'Hoffnung',
+                    text: 'Trotz des Hindernisses des Drahtes bleibt die Weite der Landschaft sichtbar. Der Himmel ist hell, und das Licht scheint von oben zu kommen. Dies kann als Symbol der Hoffnung interpretiert werden, dass die Barriere überwindbar ist oder dass es jenseits der Härten des Lebens noch Schönheit gibt.'
+                }
+            };
+
+            const contentBlocks = {
+                'stellungnahme': `
+                    <div id="content-stellungnahme" class="content-block active">
+                        <h2>4.1 Stellungnahme</h2>
+                        <p>
+                            Christian Roosens Werk <i>Zwischen Himmel und Erde</i> ist zweifellos ein visuell starkes und konzeptionell ansprechendes Foto. Es überzeugt durch seine klare Komposition und die wirkungsvolle Nutzung von Schärfe und Unschärfe, um eine Metapher für Begrenzung und Freiheit zu schaffen. Die bewusste Entscheidung, den Stacheldraht gestochen scharf und den Hintergrund verschwommen darzustellen, ist künstlerisch überzeugend und verleiht dem Bild eine tiefgründige Bedeutung. Es gelingt Roosen, mit einem simplen Motiv eine komplexe emotionale Reaktion hervorzurufen.
+                        </p>
+                        <h3>Die Kraft des Symbols</h3>
+                        <p>
+                            Der Stacheldraht als zentrales Motiv ist ein kraftvolles Symbol. Seine direkte Verständlichkeit ermöglicht es dem Betrachter, sofort eine Verbindung zum Thema der Grenzziehung herzustellen. In einer Welt, in der physische und metaphorische Barrieren allgegenwärtig sind, fungiert der Stacheldraht als Verweis auf Ausgrenzung, Unsicherheit und Einschränkung. Diese Klarheit ist eine der größten Stärken des Werkes und macht es für ein breites Publikum zugänglich. Das Bild kommuniziert seine Aussage präzise und effizient, ohne an Tiefe zu verlieren.
+                        </p>
+                        <h3>Komposition und Dynamik</h3>
+                        <p>
+                            Die Komposition des Fotos ist gezielt und wirkungsvoll, aber auch statisch. Die horizontale Linie des Drahtes teilt das Bild streng in zwei Hälften, was die Dynamik des Bildes reduziert. Es fehlt eine subtilere Bewegung oder eine Komponente, die den Blick des Betrachters durch das Bild führt, anstatt ihn nur zu spalten. Diese statische Natur ist jedoch auch ein bewusster Kunstgriff: Sie unterstreicht die unveränderliche Realität der Barriere. Das Werk ist eine Momentaufnahme, die die Unbeweglichkeit der Einschränkung vor dem Betrachter ausbreitet.
+                        </p>
+						<h3>Fazit</h3>
+                        <p>
+                            Insgesamt ist meine Gesamtwertung des Werkes positiv. Die fotografische Ausführung ist makellos und die konzeptionelle Klarheit ist beeindruckend. Roosen schafft es, eine überzeugende Stimmung zu erzeugen, die das Thema der menschlichen Einschränkung auf den Punkt bringt. Die Kritikpunkte an der Komposition schmälern die künstlerische Leistung nicht wesentlich, sondern verorten das Werk in der symbolischen Fotografie, die sich auf klare, starke Motive stützt, um eine Botschaft zu übermitteln.
+                        </p>
+                    </div>
+                `,
+                'kritik': `
+                    <div id="content-kritik" class="content-block active">
+                        <h2>4.2 Kritik und Unverständnis</h2>
+						<h3>Kritik am Ausstellungstext</h3>
+                        <p>
+                            Der offizielle <a href="Ausstellungstext.pdf">Ausstellungstext</a> zu Christian Roosens Werk "Zwischen Himmel und Erde" wirft bei mir einige Fragen auf. Ich finde, er deutet das Bild in einer Weise, die sich nicht mit dem deckt, was ich visuell wahrnehme. Der Text spricht von einer symbolischen Trennung zwischen „bodenständiger Realität“ (unten) und „hoffnungsvollem Blick nach oben“.<br>
+Meiner Meinung nach ist diese Interpretation nicht schlüssig. Im Foto sind sowohl der Himmel als auch die untere Landschaft visuell ansprechend. Die grüne Wiese wirkt friedlich und schön. Sie ist keineswegs eine bedrohliche „Realität“ im Gegensatz zu einem „hoffnungsvollen Himmel“. Die gesamte Szene ist idyllisch, bis auf ein einziges Element: den Stacheldraht. Die eigentliche Trennung findet daher nicht zwischen oben und unten statt, sondern zwischen dem Betrachter und der Szene.
+                        </p>
+                        <h3>Was ich im Bild sehe</h3>
+                        <p>
+                            Die wahre Aussage des Werkes liegt für mich in der Barriere, die der Stacheldraht direkt vor uns aufbaut. Er hindert uns daran, die friedliche Landschaft zu betreten oder Teil davon zu sein. Es ist eine Trennung zwischen „Hier“ (wo wir stehen) und „Dort“ (der unerreichbaren Idylle). Die Landschaft, obwohl unscharf, ist die verlockende Hoffnung, die wir nicht erreichen können. Der Stacheldraht ist die harte Realität.
+                        </p>
+						<figure>
+                            <center><img src="BildPPPpng.png" alt="" width="45%"></center>
+                            <figcaption class="image-caption">Die grüne Landschaft, rot markiert, wirkt einladend und verheißungsvoll, steht aber durch den Draht, blau markiert, als unerreichbar da.</figcaption>
+                        </figure>
+						<h3>Mein Fazit zum Konflikt</h3>
+                        <p>
+						Der Ausstellungstext spricht von einem inneren Aufbruch und äußerer Einschränkung – eine Metapher, die zum Werk passt, deren Begründung durch die Trennung von Himmel und Erde für mich aber nicht stimmig ist. Ein noch stärkeres, aber anderes visuelles Statement hätte das Bild erzeugen können, wenn die Landschaft im unteren Teil nicht einladend, sondern zum Beispiel trist oder karg gewesen wäre. Dann würde durch den Stacheldraht die Trennung zwischen der rauen Realität und dem ersehnten Himmel symbolisiert werden.
+                        </p>
+                    </div>
+                `,
+                'neuinterpretation': `
+                    <div id="content-neuinterpretation" class="content-block active">
+                        <h2>Neuinterpretation bzw. Nachbildung</h2>
+						<h3>Ausgangssituation</h3>
+                        <p>
+                           Aufgrund der Kritik und des Unverständnisses, welches von mir in eben jenem Abschnitt dargestellt wurde, habe ich versucht, eine „Neugestaltung“ des Bildes unter der Interpretation des Ausstellungstextes zu erstellen.</p>
+<p>Diese „Neugestaltung“ soll sich also auf einen stärkeren Kontrast zwischen Himmel und Landschaft konzentrieren. Der Himmel soll visuell ansprechend wirken und damit für Hoffnung und Freiheit stehen. Die Landschaft hingegen soll trostlos und karg dargestellt sein und somit im Kontrast zum Himmel stehen und die „bodenständige Realität“ zeigen.
+
+                        </p>
+                        <h3>Erstellung der „Neugestaltung“</h3>
+                        <p>
+                            Zuerst habe ich die Eigenschaften des Ursprungswerkes betrachtet, um eine Auswahl für die Ausrüstung bei der Erstellung meines Werkes zu treffen. Da der Blick den eines Menschen darstellt, habe ich mich für ein 35mm-Objektiv entschieden, welches als „natürliche Brennweite“ hinsichtlich des Vergleiches mit dem menschlichen Auge gilt. Um den Unschärfeeffekt (Bokeh) des Hintergrundes zu erzielen, habe ich mich für ein Objektiv mit relativ großer Offenblende entschieden: F1.4. Da ich zuhause keinen Stacheldraht finden konnte, habe ich mich für einen herkömmlichen Draht entschieden.
+                        </p>
+                        <p>Um die Fotografie erstellen zu können, musste erst einmal eine passende Landschaft zur Tageszeit gefunden werden: d. h. ein relativ gerader Horizont (ohne Bäume, Häuser usw.). Die Landschaft des Vordergrundes sollte zwar trostlos und karg sein, jedoch konnte ich eine solche nicht finden. Dies sollte in der Nachbearbeitung verändert werden. Dabei ist folgendes Foto entstanden, welches etwas gegen die Sonne aufgenommen wurde, um den Draht dunkler darzustellen, als er in echt ist:
+                        </p>
+						<figure>
+                            <center><img src="Neu2.png" alt="" width="45%"></center>
+                            <figcaption class="image-caption">Zu sehen ist die unbearbeitete Ursprungsaufnahme,</figcaption>
+                        </figure>
+						<p>Um das Foto dem ursprünglichen Werk entsprechend zu bearbeiten, bevor ich meine Neuinterpretation anwende, habe ich die globale Luminanz angehoben, die Sättigung verstärkt und den Ausschnitt dem Ursprungswerk näherkommend gewählt. Lokal habe ich die Klarheit und die Dunstentfernung im Himmel gesenkt, um das Bild in jenem Bereich sanfter wirken zu lassen. Klarheit und Kontrast wurden im Bereich des Drahtes jedoch verstärkt um ihn dunkler, rauer und damit bedrohlicher wirken zu lassen. Dadurch entsprach meine Fotografie in gewisser Hinsicht dem Werk Roosens:
+                        </p>
+						<figure>
+                            <center><img src="bildEcht.png" alt="" width="45%"></center><br>
+							<center><img src="Neu1.png" alt="" width="45%"></center>
+                            <figcaption class="image-caption">Oben: Roosens Werk; Unten: meine Nachahmung</figcaption>
+                        </figure>
+						<p>Auf Grundlage des von mir entstandenen Fotos habe ich mit KI (ChatGPT) den unteren Teil des Bildes insofern ändern lassen, dass nun eine trostlose und raue Landschaft dargestellt wird. Dieses nun entstandene Werk entspricht meiner Meinung nach eher der Interpretation des Ausstellungstextes als das Werk Roosens es tut:
+                        </p>
+						<figure>
+                            <center><img src="KIfinal.png" alt="" width="45%"></center>
+                            <figcaption class="image-caption"><i>"Transform the lower part of the image into a desolate, barren landscape that feels hostile and uninviting, with dry cracked earth, lifeless soil, and patches of dead vegetation. Remove all signs of lush greenery and replace them with bleak, colorless ground textures. The wire in the middle must remain clearly visible, symbolizing the stark separation between the welcoming sky above and the harsh, repellent land below"</i></figcaption>
+                        </figure>
+                    </div>
+                `,
+                'meinung': `
+                    <div id="content-meinung" class="content-block active">
+                        <h2>Meine persönliche Meinung zum Thema</h2>
+                       <h3>Das Dasein zwischen Hoffnung und Begrenzung</h3>
+    <p>In unserem Leben stoßen wir ständig auf Grenzen. Manchmal sind sie greifbar, wie physische Barrieren oder politische Mauern. Weitaus häufiger jedoch sind sie unsichtbar: gesellschaftliche Erwartungen, persönliche Ängste oder psychologische Blockaden. Diese Grenzen prägen unsere Existenz und zwingen uns, uns zu positionieren. Sie sind nicht nur Hindernisse, sondern auch Bezugspunkte, die definieren, wer wir sind und was wir anstreben. Doch egal wie dicht diese Grenzen gezogen sind, die menschliche Sehnsucht nach einem Leben ohne Einschränkungen bleibt. Sie ist die treibende Kraft, die uns dazu bringt, neue Wege zu suchen und über uns hinauszuwachsen.</p>
+
+    <h3>Grenzen als Chance zur persönlichen Entwicklung</h3>
+    <p>Ich betrachte die Grenzen, die das Leben uns setzt, nicht als unüberwindbare Hindernisse, sondern als Herausforderung zur Selbstreflexion. Sie sind ein integraler Bestandteil unseres Weges, der unsere Widerstandsfähigkeit und Kreativität auf die Probe stellt. Jeder Versuch, eine Grenze zu überwinden, lehrt uns etwas über unsere eigenen Stärken und Schwächen. Wir lernen, unsere Ängste zu verstehen, unsere Fähigkeiten zu schärfen und die Welt um uns herum neu zu bewerten. Dieses Streben nach Freiheit ist kein bloßer Kampf gegen äußere Widerstände, sondern ein innerer Prozess des Wachstums. Es ist die ständige Bewegung zwischen dem Wunsch, über uns hinauszuwachsen, und der Realität, die uns daran erinnert, dass wir verletzliche Wesen sind.</p>
+
+    <h3>Das Streben nach einer grenzenlosen Welt</h3>
+    <p>Die menschliche Geschichte ist eine fortlaufende Erzählung vom Überwinden von Grenzen. Wir haben die Ozeane überquert, den Weltraum (noch nicht ganz, aber fast 🙃) erobert und die Grenzen des Wissens verschoben. Doch trotz all dieser Errungenschaften bleibt das Gefühl der Beschränkung bestehen. Wir suchen ständig nach Wegen, uns von den Ketten zu befreien, sei es durch Kunst, Wissenschaft oder philosophische Erkenntnis. Das Bild von Christian Roosen erinnert mich daran, dass das wahre Potenzial nicht in der Abwesenheit von Grenzen liegt, sondern in unserer Fähigkeit, uns ihnen zu stellen und sie in einen Prozess der persönlichen Transformation zu verwandeln. Es ist das unaufhörliche Streben nach einer grenzenlosen Existenz, das uns letztlich zutiefst menschlich macht.</p>
+
+                    </div>
+                `
+            };
+            
+            // Logik für die Klicks auf die Grid-Items
+            gridItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    if (infoToggle.checked) {
+                        // Informationsmodus ist AN
+                        const status = item.dataset.status;
+                        let conceptKey;
+                        if (status === 'negative') {
+                            conceptKey = item.dataset.negative.toLowerCase().replace(/ü/g, 'ue').replace(/ä/g, 'ae').replace(/ß/g, 'ss');
+                        } else {
+                            conceptKey = item.dataset.positive.toLowerCase().replace(/ü/g, 'ue').replace(/ä/g, 'ae').replace(/ß/g, 'ss');
+                        }
+                        
+                        const content = concepts[conceptKey];
+                        if (content) {
+                            modalTitle.textContent = content.title;
+                            modalText.textContent = content.text;
+                            modalOverlay.classList.add('active');
+                        }
+                    } else {
+                        // Normaler Toggl-Modus (Informationen sind AUS)
+                        const currentStatus = item.dataset.status;
+                        if (currentStatus === 'negative') {
+                            item.dataset.status = 'positive';
+                            item.textContent = item.dataset.positive;
+                            if (index % 2 === 0) {
+                                item.classList.add('positive-sky');
+                                item.classList.remove('positive-earth');
+                            } else {
+                                item.classList.add('positive-earth');
+                                item.classList.remove('positive-sky');
+                            }
+                        } else {
+                            item.dataset.status = 'negative';
+                            item.textContent = item.dataset.negative;
+                            item.classList.remove('positive-sky', 'positive-earth');
+                        }
+                    }
+                });
+            });
+
+            modalCloseButton.addEventListener('click', () => {
+                modalOverlay.classList.remove('active');
+            });
+
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+            
+            // Logik für die Klicks auf die Papier-Overlays
+            paperOverlays.forEach(paper => {
+                paper.addEventListener('click', () => {
+                    const contentId = paper.dataset.contentId;
+                    
+                    if (activePaperId === contentId) {
+                        // Klick auf das bereits geöffnete Papier -> schließen
+                        dynamicContentContainer.innerHTML = '';
+                        activePaperId = null;
+                    } else {
+                        // Alle Inhaltsblöcke leeren
+                        dynamicContentContainer.innerHTML = '';
+                        
+                        // Den ausgewählten Inhaltsblock einfügen
+                        const selectedBlockHTML = contentBlocks[contentId];
+                        if (selectedBlockHTML) {
+                            dynamicContentContainer.insertAdjacentHTML('afterbegin', selectedBlockHTML);
+                            activePaperId = contentId;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
