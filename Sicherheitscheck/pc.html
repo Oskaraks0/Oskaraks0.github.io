@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicherheits-Check | High-End Audit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f8f4;
+            --text-color: #1a1a1a;
+            --accent-red: #ff4d4d;
+            --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--grain);
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .syne { font-family: 'Syne', sans-serif; }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid var(--text-color);
+            box-shadow: 16px 16px 0px var(--text-color);
+            width: 100%;
+            max-width: 550px;
+            padding: 3rem;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: none;
+            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .step-active { display: block; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--text-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .btn-main {
+            display: block;
+            text-align: center;
+            background: var(--text-color);
+            color: white;
+            padding: 1.25rem;
+            width: 100%;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid var(--text-color);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-main:hover {
+            background: white;
+            color: var(--text-color);
+            transform: translate(-4px, -4px);
+            box-shadow: 6px 6px 0px var(--text-color);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border: 2px solid var(--text-color);
+            margin-top: 2rem;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--text-color);
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .alert-box {
+            background: #fff;
+            border: 2px solid var(--accent-red);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .btn-repeat {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            text-decoration: underline;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        .btn-repeat:hover { opacity: 1; }
+
+        .faq-section {
+            width: 100%;
+            max-width: 550px;
+            font-size: 12px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1rem;
+        }
+
+        details summary {
+            cursor: pointer;
+            font-weight: bold;
+            list-style: none;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+        }
+        details[open] summary { opacity: 1; }
+
+        /* Animation Styles */
+        .laugh-anim {
+            font-size: 3rem;
+            animation: bounce 0.5s infinite alternate ease-in-out;
+            display: inline-block;
+        }
+        @keyframes bounce {
+            from { transform: scale(1) rotate(-5deg); }
+            to { transform: scale(1.3) rotate(5deg); }
+        }
+        
+        .heheheha {
+            font-weight: 900;
+            color: #ff4d4d;
+            text-shadow: 2px 2px 0 #000;
+            animation: shake 0.2s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-1px, -2px) rotate(-1deg); }
+            40% { transform: translate(-3px, 0px) rotate(1deg); }
+            60% { transform: translate(3px, 2px) rotate(0deg); }
+            80% { transform: translate(1px, -1px) rotate(1deg); }
+            100% { transform: translate(-1px, 2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-card">
+        <header class="mb-12 border-b-2 border-black pb-4">
+            <h1 class="syne text-4xl font-black uppercase tracking-tighter">Sicherheits-Check</h1>
+            <p class="text-xs uppercase font-bold opacity-50">Kryptographisches Audit v4.2</p>
+        </header>
+
+        <!-- STEP 1 -->
+        <div id="step-1" class="step step-active">
+            <p class="mb-4 font-bold text-lg">Schritt 1: Datenerfassung</p>
+            <p class="mb-6 text-sm opacity-70">Um die strukturelle Integrität Ihres Passworts zu prüfen, müssen wir die aktuellen Fragmente in unsere Testumgebung laden. Keine Sorge, wir analysieren nur die molekulare Dichte Ihrer Zeichenabfolge.</p>
+            <input type="text" id="platform" placeholder="Plattform (z.B. Instagram)">
+            <input type="text" id="username" placeholder="Benutzername">
+            <input type="password" id="password" placeholder="Passwort">
+            <button onclick="nextStep(2)" class="btn-main mt-4">Audit einleiten (5,00 €)</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div id="step-2" class="step">
+            <h2 class="syne text-2xl font-bold mb-4">Schritt 2: Gebühren-Clearing</h2>
+            <p class="mb-6 text-sm opacity-70">Hochleistungsscans verbrauchen enorme Mengen an digitalem Weihwasser. Bitte begleichen Sie die Bereitstellungsgebühr, damit wir mit der Tiefenprüfung fortfahren können.</p>
+            <div class="space-y-4">
+                <button onclick="processPayment(3)" class="border-2 border-black p-4 w-full text-left font-bold hover:bg-black hover:text-white transition-colors uppercase">Kreditkarte (Sicher)</button>
+                <button onclick="processPayment(3)" class="border-2 border-black p-4 w-full text-left font-bold hover:bg-black hover:text-white transition-colors uppercase">PayPal (Schnell)</button>
+            </div>
+            <p id="payment-status" class="mt-4 text-xs italic hidden text-center">Autorisierung im Quanten-Netzwerk...</p>
+        </div>
+
+        <!-- STEP 3 -->
+        <div id="step-3" class="step">
+            <h2 class="syne text-3xl font-black text-red-600 mb-2 italic uppercase">System-Leck!</h2>
+            <p class="mb-4 text-sm font-bold">Schritt 3: Diagnosebericht</p>
+            <p class="mb-4 text-xs opacity-80">Unsere Sensoren schlagen Alarm. Ihr Passwort ist so stabil wie ein nasser Keks im Regen. Um einen Totalverlust Ihrer Identität zu verhindern, müssen wir die Zeichenketten sofort harmonisieren.</p>
+            <div class="alert-box">
+                <p id="dynamic-warning" class="text-sm font-medium italic"></p>
+            </div>
+            <button onclick="nextStep(4)" class="btn-main uppercase">Sofort-Harmonisierung (2,50 €)</button>
+        </div>
+
+        <!-- STEP 4 -->
+        <div id="step-4" class="step text-center">
+            <h2 class="syne text-2xl font-bold mb-4">Schritt 4: Rekonfiguration</h2>
+            <p class="mb-8 text-xs opacity-70 italic uppercase">Wir weben jetzt eine neue Sicherheitsmauer um Ihre Zugangsdaten. Das alte Passwort wird atomisiert und durch eine unknackbare Matrix ersetzt.</p>
+            <div class="text-6xl font-black mb-4 italic" id="countdown">10</div>
+            <div class="progress-bar-container">
+                <div id="progress-fill" class="progress-bar-fill"></div>
+            </div>
+            <p id="log-msg" class="mt-6 text-xs uppercase font-bold opacity-50 tracking-widest">Initialisiere Quanten-Brücke...</p>
+        </div>
+
+        <!-- STEP 5 -->
+        <div id="step-5" class="step">
+            <h2 class="syne text-3xl font-black mb-4 uppercase">Schritt 5: Übergabe</h2>
+            <p class="mb-6 text-sm">Die Prozedur war erfolgreich. Ihr Account ist nun in einer 12-dimensionalen Firewall isoliert. Um das neue Passwort zu entschlüsseln, ist ein finaler Zertifizierungsschlüssel notwendig.</p>
+            
+            <div class="bg-black text-white p-8 mb-6 text-center shadow-lg border-2 border-black">
+                <p class="text-xs uppercase opacity-50 mb-2">Freischaltungs-Honorar</p>
+                <div class="text-5xl font-black">99,99 €</div>
+            </div>
+            
+            <button onclick="showFinalAnimation()" class="btn-main uppercase">Code jetzt extrahieren</button>
+        </div>
+
+        <!-- FINAL ANIMATION STEP -->
+        <div id="step-final" class="step text-center">
+            <div id="anim-container" class="py-10">
+                <!-- Animationen werden hier eingefügt -->
+            </div>
+            <p class="syne text-xl font-bold mb-8 uppercase italic">Zahlung bestätigt!</p>
+            <button onclick="location.reload()" class="btn-main bg-white text-black hover:bg-black hover:text-white uppercase text-xs p-3">Andere Zugangsdaten testen</button>
+        </div>
+
+        <footer class="mt-12 pt-4 border-t border-gray-200 text-[10px] uppercase font-bold opacity-40 flex justify-between items-center">
+            <span>&copy; Security 2024</span>
+            <span onclick="location.reload()" class="btn-repeat">Neustart</span>
+        </footer>
+    </div>
+
+    <!-- Impressum & FAQ Sektion -->
+    <div class="faq-section mb-12">
+        <details>
+            <summary>Rechtliches & Impressum</summary>
+            <div class="p-4 bg-white/50 border border-black/10 mt-2">
+                <p class="font-bold mb-2">Impressum der Dunkelkammer</p>
+                <p>Betreiber: Cyber-Orakel & Partner (Verschlüsselungs-Kollektiv)<br>
+                Sitz: Server-Rack 42, Cloud-Sektor 9, Neuland.</p>
+                <p class="mt-4 font-bold">FAQ — Häufig gestellte Sinnfragen:</p>
+                <ul class="space-y-2 mt-2 italic">
+                    <li><strong>Q: Werden meine Daten gespeichert?</strong><br>A: Nur die guten. Die schlechten werfen wir in den digitalen Müllschlucker.</li>
+                    <li><strong>Q: Kann ich mein Geld zurückhaben?</strong><br>A: Sobald die Entropie des Universums rückwärts läuft, schicken wir Ihnen einen Scheck.</li>
+                    <li><strong>Q: Ist das ein Scam?</strong><br>A: Wir bevorzugen den Begriff "Interaktives Performance-Audit mit monetärer Komponente".</li>
+                </ul>
+                <p class="mt-4 text-[10px] opacity-50 uppercase">Haftungsausschluss: Wer das liest, ist sicher. Vermutlich.</p>
+            </div>
+        </details>
+    </div>
+
+    <script>
+        const warnings = [
+            "Es wurde eine rückläufige Entropie in Ihrem Passwort-Kernel detektiert. Ihre Zeichenfolge verliert an Realität.",
+            "Ein russischer Toaster versucht seit 42 Minuten, Ihren Account zu braten. Die CPU-Temperatur steigt kritisch.",
+            "Detektion einer subkutanen Daten-Leckage: Ihre Sonderzeichen sind zu schüchtern und verstecken sich vor der Firewall.",
+            "Warnung: Ihr Passwort enthält Spuren von Logik. Hacker bevorzugen puren Wahnsinn. Wir müssen nachbessern.",
+            "Ihr Passwort wird von einem interdimensionalen Bot-Netzwerk als 'sehr lecker' eingestuft. Wir riechen Gefahr.",
+            "Kritischer Fehler im Flux-Kompensator Ihrer Verschlüsselung. Wenn wir jetzt nichts tun, landen Ihre Daten im Jahr 1955."
+        ];
+
+        function nextStep(num) {
+            if (num === 2) {
+                const plat = document.getElementById('platform').value;
+                const user = document.getElementById('username').value;
+                const pass = document.getElementById('password').value;
+                if (!plat || !user || !pass) return alert("Fehlende Parameter: Das System verweigert die Kooperation.");
+            }
+            
+            if (num === 3) {
+                document.getElementById('dynamic-warning').innerText = warnings[Math.floor(Math.random() * warnings.length)];
+            }
+            
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('step-active');
+                s.style.display = 'none';
+            });
+            
+            const targetStep = document.getElementById('step-' + num);
+            targetStep.style.display = 'block';
+            setTimeout(() => targetStep.classList.add('step-active'), 10);
+            
+            if (num === 4) startMigration();
+        }
+
+        function processPayment(next) {
+            document.getElementById('payment-status').classList.remove('hidden');
+            setTimeout(() => nextStep(next), 2000);
+        }
+
+        function startMigration() {
+            let count = 10;
+            const logMsgs = [
+                "Defragmentiere Schicksal...",
+                "Suche nach digitalen Restbeständen...",
+                "Invertiere Bit-Entropie...",
+                "Versiegele Cloud-Vakuum...",
+                "Isoliere Hacker-Schwingungen...",
+                "Extrahiere pure Sicherheit...",
+                "Kopiere Firewall-DNS...",
+                "Synthese abgeschlossen."
+            ];
+            
+            const timer = setInterval(() => {
+                count--;
+                document.getElementById('countdown').innerText = count;
+                document.getElementById('progress-fill').style.width = (100 - (count * 10)) + "%";
+                
+                if (logMsgs[10 - count]) {
+                    document.getElementById('log-msg').innerText = logMsgs[10 - count];
+                }
+
+                if (count <= 0) {
+                    clearInterval(timer);
+                    setTimeout(() => nextStep(5), 500);
+                }
+            }, 1000);
+        }
+
+        function showFinalAnimation() {
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('step-active');
+                s.style.display = 'none';
+            });
+
+            const final = document.getElementById('step-final');
+            final.style.display = 'block';
+            setTimeout(() => final.classList.add('step-active'), 10);
+
+            const container = document.getElementById('anim-container');
+            /*const choices = [
+                '<div class="laugh-anim">😂</div><div class="syne heheheha text-4xl block mt-4">HEHEHEHA!</div>',
+                '<div class="laugh-anim">🤡</div><div class="syne text-2xl block mt-4">L-RATIO + SKILL ISSUE</div>',
+                '<div class="laugh-anim">🦒</div><div class="syne text-2xl block mt-4">LOOK AT THIS DUDE...</div>',
+                '<div class="laugh-anim">🍌</div><div class="syne text-2xl block mt-4">POTASSIUM OVERLOAD</div>'
+            ];
+            */
+            container.innerHTML = choices[Math.floor(Math.random() * choices.length)];
+        }
+    </script>
+</body>
+</html>
