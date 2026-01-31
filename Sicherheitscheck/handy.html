@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sicherheits-Check | High-End Audit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Syne:wght@400;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f8f4;
+            --text-color: #1a1a1a;
+            --accent-red: #ff4d4d;
+            --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding: 1rem;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--grain);
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .syne { font-family: 'Syne', sans-serif; }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--text-color);
+            box-shadow: 8px 8px 0px var(--text-color);
+            width: 100%;
+            max-width: 500px;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 10;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .app-card {
+                padding: 3rem;
+                box-shadow: 16px 16px 0px var(--text-color);
+                margin-top: 0;
+            }
+        }
+
+        .step {
+            display: none;
+        }
+        .step-active { display: block; }
+
+        input {
+            width: 100%;
+            background: transparent;
+            border: 2px solid var(--text-color);
+            padding: 0.85rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            border-radius: 0;
+            appearance: none;
+        }
+
+        .btn-main {
+            display: block;
+            text-align: center;
+            background: var(--text-color);
+            color: white;
+            padding: 1rem;
+            width: 100%;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid var(--text-color);
+            cursor: pointer;
+            border-radius: 0;
+            transition: transform 0.1s;
+        }
+        .btn-main:active {
+            transform: scale(0.98);
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border: 2px solid var(--text-color);
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--text-color);
+            width: 0%;
+        }
+
+        .alert-box {
+            background: #fff;
+            border: 2px solid var(--accent-red);
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .faq-section {
+            width: 100%;
+            max-width: 500px;
+            font-size: 11px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1rem;
+        }
+
+        details summary {
+            cursor: pointer;
+            font-weight: bold;
+            list-style: none;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-card">
+        <header class="mb-8 border-b-2 border-black pb-4">
+            <h1 class="syne text-2xl sm:text-4xl font-black uppercase tracking-tighter">Sicherheits-Check</h1>
+            <p class="text-[10px] uppercase font-bold opacity-50">Kryptographisches Audit v5.0</p>
+        </header>
+
+        <!-- STEP 1 -->
+        <div id="step-1" class="step step-active">
+            <p class="mb-4 font-bold">Schritt 1: Datenerfassung</p>
+            <p class="mb-6 text-xs sm:text-sm opacity-70">Wir analysieren die molekulare Dichte Ihrer Zeichenabfolge, um strukturelle Schwachstellen zu identifizieren.</p>
+            <input type="text" id="platform" placeholder="Plattform (z.B. Instagram)">
+            <input type="text" id="username" placeholder="Benutzername">
+            <input type="password" id="password" placeholder="Passwort">
+            <button onclick="nextStep(2)" class="btn-main mt-2">Audit einleiten (5,00 €)</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div id="step-2" class="step">
+            <h2 class="syne text-xl font-bold mb-4">Schritt 2: Clearing</h2>
+            <p class="mb-6 text-xs sm:text-sm opacity-70">Hochleistungsscans erfordern Ressourcen. Begleichen Sie die Gebühr für den Tiefenscan.</p>
+            <div class="space-y-3">
+                <button onclick="processPayment(3)" class="border-2 border-black p-3 w-full text-left font-bold text-sm uppercase">Kreditkarte</button>
+                <button onclick="processPayment(3)" class="border-2 border-black p-3 w-full text-left font-bold text-sm uppercase">PayPal</button>
+            </div>
+            <p id="payment-status" class="mt-4 text-[10px] italic hidden text-center">Quanten-Autorisierung läuft...</p>
+        </div>
+
+        <!-- STEP 3 -->
+        <div id="step-3" class="step">
+            <h2 class="syne text-2xl font-black text-red-600 mb-2 uppercase">Gefahr erkannt!</h2>
+            <p class="mb-4 text-xs font-bold uppercase tracking-tight">Schritt 3: Diagnosebericht</p>
+            <div class="alert-box">
+                <p id="dynamic-warning" class="text-xs sm:text-sm italic font-medium"></p>
+            </div>
+            <button onclick="nextStep(4)" class="btn-main uppercase">Sofort-Optimierung (2,50 €)</button>
+        </div>
+
+        <!-- STEP 4 -->
+        <div id="step-4" class="step text-center">
+            <h2 class="syne text-xl font-bold mb-4">Schritt 4: Rekonfiguration</h2>
+            <p class="mb-6 text-[10px] opacity-70 uppercase tracking-widest">Die atomare Umstrukturierung Ihrer Daten läuft.</p>
+            <div class="text-5xl font-black mb-4 italic" id="countdown">10</div>
+            <div class="progress-bar-container">
+                <div id="progress-fill" class="progress-bar-fill"></div>
+            </div>
+            <p id="log-msg" class="mt-4 text-[9px] uppercase font-bold opacity-50">Initialisiere Quanten-Brücke...</p>
+        </div>
+
+        <!-- STEP 5 -->
+        <div id="step-5" class="step">
+            <h2 class="syne text-2xl font-black mb-4 uppercase">Schritt 5: Abschluss</h2>
+            <p class="mb-6 text-xs sm:text-sm">Verschlüsselung erfolgreich. Ihr Account befindet sich nun in einer 12-dimensionalen Sicherheits-Isolierung.</p>
+            
+            <div class="bg-black text-white p-6 mb-6 text-center border-2 border-black">
+                <p class="text-[10px] uppercase opacity-50 mb-1">Finales Honorar</p>
+                <div class="text-4xl font-black">99,99 €</div>
+            </div>
+            
+            <button onclick="showFinalMessage()" class="btn-main uppercase">Zugangscode freischalten</button>
+        </div>
+
+        <!-- FINAL STEP -->
+        <div id="step-final" class="step text-center">
+            <h2 class="syne text-2xl font-black mb-4 uppercase">Vorgang Beendet</h2>
+            <p class="text-xs sm:text-sm mb-8 px-4">Die Bestätigung wurde an das zentrale Kontrollzentrum übermittelt. Ihr neues Passwort wird nach dem Clearing generiert.</p>
+            <button onclick="location.reload()" class="btn-main bg-white text-black hover:bg-black hover:text-white uppercase text-xs">Neuen Check starten</button>
+        </div>
+
+        <footer class="mt-8 pt-4 border-t border-gray-200 text-[9px] uppercase font-bold opacity-40 flex justify-between items-center">
+            <span>&copy; Security 2024</span>
+            <span onclick="location.reload()" class="cursor-pointer underline">Reset</span>
+        </footer>
+    </div>
+
+    <!-- Impressum & FAQ -->
+    <div class="faq-section mb-10">
+        <details>
+            <summary>Rechtliches & FAQ</summary>
+            <div class="p-3 bg-white/50 border border-black/10 mt-1 text-[10px]">
+                <p class="font-bold mb-2">Impressum</p>
+                <p>Betreiber: Cyber-Orakel Sektor 9. Sitz: Server-Rack 42.</p>
+                <p class="mt-3 font-bold">Kurz-FAQ:</p>
+                <ul class="space-y-1 mt-1 italic">
+                    <li>Q: Ist das sicher? A: Absolut.</li>
+                    <li>Q: Warum 99,99€? A: Hochwertiges digitales Weihwasser ist teuer.</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+
+    <script>
+        const warnings = [
+            "Rückläufige Entropie im Passwort-Kernel detektiert.",
+            "Ein russischer Toaster versucht Ihren Account zu braten.",
+            "Detektion einer subkutanen Daten-Leckage.",
+            "Warnung: Ihr Passwort enthält Spuren von gefährlicher Logik.",
+            "Interdimensionales Bot-Netzwerk scannt Ihre Fragmente.",
+            "Kritischer Fehler im Flux-Kompensator der Firewall."
+        ];
+
+        function nextStep(num) {
+            if (num === 2) {
+                if (!document.getElementById('platform').value || !document.getElementById('username').value || !document.getElementById('password').value) {
+                    return alert("System-Fehler: Bitte alle Felder befüllen.");
+                }
+            }
+            if (num === 3) {
+                document.getElementById('dynamic-warning').innerText = warnings[Math.floor(Math.random() * warnings.length)];
+            }
+            
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('step-active'));
+            const target = document.getElementById(num === 'final' ? 'step-final' : 'step-' + num);
+            target.classList.add('step-active');
+            
+            if (num === 4) startMigration();
+        }
+
+        function processPayment(next) {
+            document.getElementById('payment-status').classList.remove('hidden');
+            setTimeout(() => nextStep(next), 1500);
+        }
+
+        function startMigration() {
+            let count = 10;
+            const logMsgs = ["Defragmentiere...", "Invertiere Bits...", "Isoliere...", "Sichere...", "Synchronisiere...", "Finalisiere..."];
+            const fill = document.getElementById('progress-fill');
+            const timer = setInterval(() => {
+                count--;
+                document.getElementById('countdown').innerText = count;
+                fill.style.width = (100 - (count * 10)) + "%";
+                if (logMsgs[10-count]) document.getElementById('log-msg').innerText = logMsgs[10-count];
+                if (count <= 0) {
+                    clearInterval(timer);
+                    setTimeout(() => nextStep(5), 500);
+                }
+            }, 800);
+        }
+
+        function showFinalMessage() {
+            nextStep('final');
+        }
+    </script>
+</body>
+</html>
