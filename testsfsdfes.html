@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>ZEITWERT // Optimierung</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f9f9f9;
+            --border: #e0e0e0;
+            --text-main: #1a1a1a;
+            --text-sub: #999999;
+            --accent: #000000;
+            --danger: #ff3b30;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
+            background-color: var(--bg); color: var(--text-main); 
+            margin: 0; padding: 20px; display: flex; justify-content: center;
+        }
+
+        .app-container { max-width: 800px; width: 100%; }
+        header { text-align: center; margin: 40px 0; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        h1 { font-weight: 200; letter-spacing: 5px; text-transform: uppercase; margin: 0; font-size: 1.8rem; }
+
+        .konto-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; text-align: center; color: var(--text-sub); }
+        .kontostand { 
+            display: grid; grid-template-columns: repeat(5, 1fr); 
+            gap: 1px; background: var(--border); border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .einheit { background: white; padding: 20px 5px; text-align: center; }
+        .label { font-size: 0.6rem; text-transform: uppercase; color: var(--text-sub); margin-bottom: 5px; }
+        .wert { font-size: 1.3rem; font-weight: 300; font-variant-numeric: tabular-nums; }
+
+        .spar-bereich { text-align: center; padding: 40px; background: var(--surface); border-radius: 20px; margin-bottom: 40px; }
+        #hauptBtn { 
+            background: var(--accent); color: white; border: none; 
+            padding: 25px 60px; border-radius: 50px; font-size: 1.1rem; 
+            cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #hauptBtn.aktiv { background: var(--danger); transform: scale(1.05); }
+        #liveCounter { font-family: monospace; font-size: 2.5rem; margin-top: 20px; font-weight: 300; color: var(--text-main); }
+
+        .section-titel { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; margin: 50px 0 20px; letter-spacing: 2px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        
+        .card { border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 25px; background: white; }
+        .flex-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f2f2f2; }
+        .flex-row:last-child { border-bottom: none; }
+        
+        .kauf-input { width: 70px; padding: 8px; border: 1px solid var(--border); border-radius: 6px; margin-right: 10px; text-align: center; font-size: 0.9rem; }
+        .kauf-btn { background: white; border: 1.5px solid var(--accent); padding: 8px 18px; border-radius: 25px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.2s; }
+        .kauf-btn:hover { background: var(--accent); color: white; }
+
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        .modal-content { background: white; padding: 50px; border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); text-align: center; width: 450px; }
+        
+        #oskarOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; justify-content: center; align-items: center; font-size: 4rem; font-weight: 200; color: var(--danger); text-align: center; }
+        
+        .desc { font-size: 0.75rem; color: var(--text-sub); margin-top: 3px; display: block; }
+        select, input[type=text], input[type=number] { padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; width: 100%; font-size: 0.9rem; box-sizing: border-box; }
+        
+        footer { text-align: center; margin: 60px 0; font-size: 0.7rem; color: #bbb; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div id="oskarOverlay">Nein, danke!</div>
+
+<div id="modal">
+    <div class="modal-content">
+        <h2 id="modalTitel" style="font-weight: 300; text-transform: uppercase; letter-spacing: 2px;">Optionen</h2>
+        <div id="modalBody"></div>
+        <button class="kauf-btn" onclick="schliesseModal()" style="margin-top: 20px; border-color: #ccc; color: #999;">Abbrechen</button>
+    </div>
+</div>
+
+<div class="app-container">
+    <header><h1>Zeitwert</h1></header>
+
+    <span class="konto-label">Aktuelles Zeitkonto</span>
+    <div class="kontostand">
+        <div class="einheit"><div class="label">Sek</div><div class="wert" id="acc-s">0</div></div>
+        <div class="einheit"><div class="label">Min</div><div class="wert" id="acc-m">0</div></div>
+        <div class="einheit"><div class="label">Std</div><div class="wert" id="acc-h">0</div></div>
+        <div class="einheit"><div class="label">Tge</div><div class="wert" id="acc-d">0</div></div>
+        <div class="einheit"><div class="label">Mnt</div><div class="wert" id="acc-mo">0</div></div>
+    </div>
+
+    <div class="spar-bereich">
+        <button id="hauptBtn">A*beitszeit sinnvoll ansparen</button>
+        <div id="liveCounter">0</div>
+        <div style="margin-top: 30px;">
+            <div style="font-size: 0.7rem; color: var(--text-sub); margin-bottom: 10px; text-transform: uppercase;">Simulations-Wahn: <span id="rateVal" style="color:black; font-weight:bold;">1x</span></div>
+            <input type="range" id="rateSlider" min="0" max="8" step="0.1" value="0" style="width:250px; accent-color: black;">
+        </div>
+    </div>
+
+    <div class="section-titel">Währungs-Tausch (Ineffizienz-Modul)</div>
+    <div class="card">
+        <div class="flex-row">
+            <div><strong>Minuten erwerben</strong><span class="desc">Kosten: 100 Sek pro Minute</span></div>
+            <div><input type="number" id="buy-m" class="kauf-input" value="1" min="1"> <button class="kauf-btn" onclick="tausch('s','m', 100)">Kaufen</button></div>
+        </div>
+        <div class="flex-row">
+            <div><strong>Stunden erwerben</strong><span class="desc">Kosten: 80 Min pro Stunde</span></div>
+            <div><input type="number" id="buy-h" class="kauf-input" value="1" min="1"> <button class="kauf-btn" onclick="tausch('m','h', 80)">Kaufen</button></div>
+        </div>
+        <div class="flex-row">
+            <div><strong>Tage erwerben</strong><span class="desc">Kosten: 40 Std pro Tag</span></div>
+            <div><input type="number" id="buy-d" class="kauf-input" value="1" min="1"> <button class="kauf-btn" onclick="tausch('h','d', 40)">Kaufen</button></div>
+        </div>
+        <div class="flex-row">
+            <div><strong>Monate erwerben</strong><span class="desc">Kosten: 50 Tage pro Monat</span></div>
+            <div><input type="number" id="buy-mo" class="kauf-input" value="1" min="1"> <button class="kauf-btn" onclick="tausch('d','mo', 50)">Kaufen</button></div>
+        </div>
+    </div>
+
+    <div class="section-titel">Echt-Leben-Einlösung</div>
+    
+    <div class="card" style="border: 2px solid var(--accent);">
+        <div class="flex-row">
+            <div><strong>Taktischer A*beitszeitbetrug</strong> <span class="desc">Verschwinden Sie einfach. Faktor 1.0 (außer Kindergarten).</span></div>
+            <button class="kauf-btn" onclick="oeffneBetrug()">Betrug planen</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="flex-row">
+            <div><strong>A*beitszeit verschenken</strong> <span class="desc">Andere für sich a*beiten lassen.</span></div>
+            <button class="kauf-btn" onclick="oeffnePersonenOption('Arbeitszeit', 'Hier wird die A*beit delegiert.')">Person wählen</button>
+        </div>
+        <div class="flex-row">
+            <div><strong>Unentspannte Zeit verschenken</strong> <span class="desc">Anderen den Tag ruinieren. Kurs 2:1</span></div>
+            <button class="kauf-btn" onclick="oeffnePersonenOption('Unentspannte Zeit', 'Schenken Sie puren Stress.')">Person wählen</button>
+        </div>
+        <div class="flex-row">
+            <div><strong>Kaffee-Moment</strong> <span class="desc">Heiß, schwarz, ohne Meetings.</span></div>
+            <button class="kauf-btn" onclick="oeffneDirekt('Kaffee-Moment', 'Guter Kaffee braucht Zeit.')">Konfigurieren</button>
+        </div>
+        <div class="flex-row">
+            <div><strong>Wald-Atmosphäre</strong> <span class="desc">Simuliertes Moos und echte Stille.</span></div>
+            <button class="kauf-btn" onclick="oeffneDirekt('Wald-Atmosphäre', 'Der Wald ist der Feind der Excel-Tabelle.')">Konfigurieren</button>
+        </div>
+        <div class="flex-row">
+            <div><strong>Komplette A*beits-Amnesie</strong> <span class="desc">Vergessen Sie, was Sie beruflich tun.</span></div>
+            <button class="kauf-btn" onclick="oeffneDirekt('A*beits-Amnesie', 'Wer sind Sie? Wo sind Sie? Egal.')">Konfigurieren</button>
+        </div>
+    </div>
+
+    <footer>SIEBEN MILLIARDEN MENSCHEN SPAREN ZEIT. SEIEN SIE EFFIZIENTER. &copy; ZEITWERT</footer>
+</div>
+
+<script>
+    let konten = { s: 0, m: 0, h: 0, d: 0, mo: 0 };
+    let aktiv = false, intervall = null, runde = 0;
+
+    function update() {
+        for(let k in konten) document.getElementById('acc-'+k).innerText = Math.floor(konten[k]).toLocaleString();
+        let rate = Math.pow(10, document.getElementById('rateSlider').value);
+        document.getElementById('rateVal').innerText = Math.floor(rate).toLocaleString() + "x";
+        document.getElementById('liveCounter').innerText = Math.floor(runde).toLocaleString();
+    }
+
+    document.getElementById('hauptBtn').onclick = function() {
+        if(!aktiv) {
+            aktiv = true; this.innerText = "Ich habe genug Zeit gespart"; this.className = "aktiv";
+            intervall = setInterval(() => { runde += (0.1 * Math.pow(10, document.getElementById('rateSlider').value)); update(); }, 100);
+        } else {
+            aktiv = false; clearInterval(intervall); konten.s += runde; runde = 0;
+            this.innerText = "A*beitszeit sinnvoll ansparen"; this.className = ""; update();
+        }
+    };
+
+    function tausch(von, zu, kurs) {
+        let mengeZuKaufen = parseFloat(document.getElementById(`buy-${zu}`).value);
+        let kosten = mengeZuKaufen * kurs;
+        if(konten[von] >= kosten) { 
+            konten[von] -= kosten; konten[zu] += mengeZuKaufen; update(); 
+        } else { 
+            alert(`Unzureichende Mittel. Ersparnis erhöhen.`); 
+        }
+    }
+
+    function oeffneBetrug() {
+        const body = document.getElementById('modalBody');
+        body.innerHTML = `
+            <label>Dauer des Betrugs:</label>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="number" id="bMenge" value="1">
+                <select id="bEinheit"><option value="s">Sek</option><option value="m">Min</option><option value="h">Std</option></select>
+            </div>
+            <label>A*beitsumfeld:</label>
+            <select id="bBeruf" onchange="document.getElementById('kgWarn').style.display = (this.value == '1000') ? 'block' : 'none'">
+                <option value="1">Büro-Hölle (1.0)</option>
+                <option value="1">Homeoffice-Ghosting (1.0)</option>
+                <option value="1">Fließband-Trance (1.0)</option>
+                <option value="1">Meeting-Koma (1.0)</option>
+                <option value="1">Baugerüst-Yoga (1.0)</option>
+                <option value="1">Kunden-Terror (1.0)</option>
+                <option value="1">Akten-Archiv (1.0)</option>
+                <option value="1">Labor-Stille (1.0)</option>
+                <option value="1">Kreativ-Blockade (1.0)</option>
+                <option value="1">A*beitslosen-Simulation (1.0)</option>
+                <option value="1000">Kindergarten (Faktor 1000.0)</option>
+            </select>
+            <p id="kgWarn" style="color:red; display:none; font-size:0.65rem; margin-bottom:10px;">⚠️ Lärmzuschlag & massive Nachfrage!</p>
+            <button class="kauf-btn" style="width:100%" onclick="kaufeBetrug()">Betrug buchen</button>
+        `;
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modalTitel').innerText = "A*beitszeitbetrug";
+    }
+
+    function kaufeBetrug() {
+        let e = document.getElementById('bEinheit').value, m = parseFloat(document.getElementById('bMenge').value), f = parseFloat(document.getElementById('bBeruf').value);
+        if(konten[e] >= m * f) { konten[e] -= (m * f); alert("System erfolgreich sabotiert (alles außer arb*iten)"); schliesseModal(); update(); }
+        else alert("Nicht genug Zeit gespart. Arbeiten Sie lieber härter!");
+    }
+
+    function oeffnePersonenOption(typ, zitat) {
+        const body = document.getElementById('modalBody');
+        body.innerHTML = `
+            <p style="font-size:0.8rem; color:#666; margin-bottom:20px;">${zitat}</p>
+            <input type="text" id="targetName" placeholder="Name des Begünstigten/Opfers...">
+            <label>Zeitmenge:</label>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="number" id="pMenge" value="10">
+                <select id="pEinheit"><option value="m">Min</option><option value="h">Std</option></select>
+            </div>
+            <button class="kauf-btn" style="width:100%" onclick="kaufeFuerPerson('${typ}')">${typ} übertragen</button>
+        `;
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modalTitel').innerText = typ;
+    }
+
+    function kaufeFuerPerson(typ) {
+        let name = document.getElementById('targetName').value.toLowerCase();
+        if(name.includes("oskar") || name.includes("oscar")) {
+            document.getElementById('oskarOverlay').style.display = 'flex';
+            setTimeout(() => { document.getElementById('oskarOverlay').style.display = 'none'; }, 1500);
+            return;
+        }
+        let e = document.getElementById('pEinheit').value, m = parseFloat(document.getElementById('pMenge').value);
+        let faktor = (typ === 'Unentspannte Zeit') ? 2 : 1.5;
+        if(konten[e] >= m * faktor) { 
+            konten[e] -= (m * faktor); 
+            alert(`${typ} wurde an das Zielobjekt übertragen.`); 
+            schliesseModal(); update(); 
+        } else alert("Kontostand zu niedrig.");
+    }
+
+    function oeffneDirekt(titel, zitat) {
+        const body = document.getElementById('modalBody');
+        body.innerHTML = `
+            <p style="font-style:italic; font-size:0.8rem; color:#666; margin-bottom:20px;">"${zitat}"</p>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <input type="number" id="dMenge" value="5">
+                <select id="dEinheit"><option value="s">Sek</option><option value="m">Min</option><option value="h">Std</option></select>
+            </div>
+            <button class="kauf-btn" style="width:100%" onclick="kaufeDirekt()">Buchen</button>
+        `;
+        document.getElementById('modal').style.display = 'flex';
+        document.getElementById('modalTitel').innerText = titel;
+    }
+
+    function kaufeDirekt() {
+        let e = document.getElementById('dEinheit').value, m = parseFloat(document.getElementById('dMenge').value);
+        if(konten[e] >= m * 1.5) { konten[e] -= (m * 1.5); alert("Erfolg."); schliesseModal(); update(); }
+        else alert("Guthaben fehlt.");
+    }
+
+    function schliesseModal() { document.getElementById('modal').style.display = 'none'; }
+    update();
+    document.getElementById('rateSlider').oninput = update;
+</script>
+
+</body>
+</html>
